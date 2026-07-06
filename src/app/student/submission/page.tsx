@@ -46,7 +46,7 @@ export default function ProjectSubmissionPage() {
             <h2>Evidence requirements</h2>
             <div className="chip-row">
               {mission.evidenceRequirements.map((item, index) => (
-                <Chip tone={index % 2 === 0 ? "teal" : "purple"} key={item}>
+                <Chip tone={item.toLowerCase().includes("ai") ? "purple" : index % 2 === 0 ? "teal" : "amber"} key={item}>
                   {item}
                 </Chip>
               ))}

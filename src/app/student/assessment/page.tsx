@@ -7,7 +7,7 @@ export default function SkillAssessmentPage() {
       <section className="phone-shell">
         <ProgressBar value={34} />
         <p className="big-meta">Warm-up - 4 of 12 <span style={{ float: "right" }}>~6 min left</span></p>
-        <span className="chip purple">Thinking challenge</span>
+        <span className="chip amber">Thinking challenge</span>
         <h1 className="page-title">
           A school buys an app to stop students coming late. Lateness doesn't change. What would you
           check first?

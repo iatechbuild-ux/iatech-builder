@@ -5,6 +5,32 @@ const flow = ["Experience", "Understand", "Rebuild", "Master", "Teach"];
 
 type Tone = "teal" | "amber" | "purple" | "coral" | "neutral";
 
+function competencyTone(label: string, index: number): Tone {
+  const normalized = label.toLowerCase();
+
+  if (normalized.includes("ai")) {
+    return "purple";
+  }
+
+  if (normalized.includes("lead") || normalized.includes("ship") || normalized.includes("risk")) {
+    return "coral";
+  }
+
+  return index % 2 === 0 ? "teal" : "amber";
+}
+
+function capabilityTone(capability: string): Tone {
+  if (capability === "Lead") {
+    return "coral";
+  }
+
+  if (capability === "Build") {
+    return "teal";
+  }
+
+  return "amber";
+}
+
 export function SectionHeader({
   eyebrow,
   title,
@@ -101,7 +127,7 @@ export function StageRail({ mission }: { mission: Mission }) {
     <div className="stage-rail" aria-label="Mission learning stages">
       {mission.stages.map((stage) => (
         <article className={`stage-card ${stage.status}`} key={stage.stage}>
-          <Chip tone={stage.status === "current" ? "teal" : stage.status === "done" ? "purple" : "neutral"}>
+          <Chip tone={stage.status === "current" || stage.status === "done" ? "teal" : "neutral"}>
             {stage.stage}
           </Chip>
           <h3>{stage.title}</h3>
@@ -147,7 +173,7 @@ export function ProjectCard({ project }: { project: Project }) {
       <ChipRow
         items={project.competencies.map((competency, index) => [
           competency,
-          index % 2 === 0 ? "teal" : competency.toLowerCase().includes("thinking") ? "coral" : "purple",
+          competencyTone(competency, index),
         ])}
       />
       <p className="meta">Evidence: {project.evidenceTypes.join(", ")}</p>
@@ -159,7 +185,7 @@ export function LabCard({ lab }: { lab: LearningLab }) {
   return (
     <article className="card lab-card">
       <div className="toolbar" style={{ justifyContent: "space-between" }}>
-        <Chip tone={lab.capability === "Build" ? "teal" : "purple"}>{lab.capability}</Chip>
+        <Chip tone={capabilityTone(lab.capability)}>{lab.capability}</Chip>
         <span className="meta">{lab.domain}</span>
       </div>
       <h3>{lab.title}</h3>

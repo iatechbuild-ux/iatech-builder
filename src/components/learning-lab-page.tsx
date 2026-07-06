@@ -4,12 +4,14 @@ import { Chip, TextField } from "@/components/ui";
 import type { LearningLab } from "@/lib/mock-data";
 
 export function LearningLabPage({ lab }: { lab: LearningLab }) {
+  const labTone = lab.capability === "Build" ? "teal" : lab.capability === "Lead" ? "coral" : "amber";
+
   return (
     <div className="page">
       <section className="panel">
         <div className="toolbar" style={{ justifyContent: "space-between" }}>
           <div>
-            <Chip tone={lab.capability === "Build" ? "teal" : "purple"}>{lab.domain}</Chip>
+            <Chip tone={labTone}>{lab.domain}</Chip>
             <h1 className="page-title">{lab.title}</h1>
             <p className="page-lead">{lab.promise}</p>
           </div>
@@ -39,7 +41,7 @@ export function LearningLabPage({ lab }: { lab: LearningLab }) {
               <h2>Evidence to save</h2>
               <div className="chip-row">
                 {lab.evidence.map((item, index) => (
-                  <Chip tone={index % 2 === 0 ? "teal" : "purple"} key={item}>
+                  <Chip tone={item.toLowerCase().includes("ai") ? "purple" : index % 2 === 0 ? "teal" : "amber"} key={item}>
                     {item}
                   </Chip>
                 ))}

@@ -13,7 +13,7 @@ export default function LessonPage() {
         </Link>
         <div className="toolbar" style={{ marginTop: 22 }}>
           <Chip tone="teal">Understand stage</Chip>
-          <Chip tone="purple">Foundation before mastery</Chip>
+          <Chip tone="amber">Foundation before mastery</Chip>
         </div>
         <h1 className="page-title">{lesson.title}</h1>
         <p className="page-lead">{lesson.objective}</p>

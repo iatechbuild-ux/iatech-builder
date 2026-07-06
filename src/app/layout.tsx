@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 const navGroups = [
@@ -43,7 +44,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+try {
+  var storedTheme = localStorage.getItem("iatech-theme");
+  var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
+} catch (_) {}
+            `,
+          }}
+        />
+      </head>
       <body>
         <div className="app-shell">
           <aside className="sidebar" aria-label="Main navigation">
@@ -64,15 +78,21 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
                 ))}
               </nav>
             ))}
+            <div className="theme-row">
+              <ThemeToggle />
+            </div>
           </aside>
           <div className="mobile-bar">
             <Link className="brand compact" href="/">
               <span className="brand-mark">IB</span>
               <strong>IATECH Builder</strong>
             </Link>
-            <Link className="mobile-action" href="/student/dashboard">
-              Continue
-            </Link>
+            <div className="actions" style={{ marginTop: 0 }}>
+              <ThemeToggle compact />
+              <Link className="mobile-action" href="/student/dashboard">
+                Continue
+              </Link>
+            </div>
           </div>
           <main>{children}</main>
         </div>

@@ -43,7 +43,12 @@ export default function MissionDetailPage() {
             <h2>Capabilities and skills</h2>
             <ChipRow items={mission.capabilityTags.map((tag) => [tag, tag === "Lead" ? "coral" : "teal"])} />
             <div style={{ marginTop: 12 }}>
-              <ChipRow items={mission.skillTags.map((tag, index) => [tag, index % 2 === 0 ? "purple" : "amber"])} />
+              <ChipRow
+                items={mission.skillTags.map((tag, index) => [
+                  tag,
+                  tag.toLowerCase().includes("ai") ? "purple" : index % 2 === 0 ? "teal" : "amber",
+                ])}
+              />
             </div>
           </article>
           <Link className="btn primary" href="/missions/never-count-twice/lesson">

@@ -25,7 +25,7 @@ export default function StudentAssistantPage() {
               <ChipRow
                 items={aiIndependenceLevels.map((level, index) => [
                   level,
-                  index < 2 ? "amber" : index === 2 ? "teal" : "purple",
+                  index < 2 ? "amber" : index === 2 ? "teal" : "coral",
                 ])}
               />
             </section>

@@ -54,7 +54,7 @@ export default function LandingPage() {
 
         <div className="chip-row" style={{ justifyContent: "center" }}>
           <Chip tone="teal">Explorer</Chip>
-          <Chip tone="purple">Builder</Chip>
+          <Chip tone="amber">Builder</Chip>
           <Chip tone="coral">Innovator</Chip>
           <span className="muted">Your pathway matches your skill, not your age.</span>
         </div>
