@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IATECH Builder prototype</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="prototype-shell">
+      <aside class="sidebar" aria-label="Prototype screens">
+        <a class="brand" href="#landing" data-link="landing" aria-label="IATECH Builder home">
+          <span class="brand-mark">IB</span>
+          <span>
+            <strong>IATECH Builder</strong>
+            <small>Clickable MVP prototype</small>
+          </span>
+        </a>
+        <div class="screen-group">
+          <p>Student</p>
+          <button data-link="landing">Landing page</button>
+          <button data-link="onboarding">Student onboarding</button>
+          <button data-link="assessment">Skill assessment</button>
+          <button data-link="student-dashboard">Student dashboard</button>
+          <button data-link="mission">Mission page</button>
+          <button data-link="mission-step">Mission step page</button>
+          <button data-link="lesson">Lesson page</button>
+          <button data-link="workspace">Build workspace</button>
+          <button data-link="ai-practice">External AI practice</button>
+          <button data-link="submission">Project submission</button>
+          <button data-link="portfolio">Portfolio</button>
+          <button data-link="badges">Badges and competency</button>
+        </div>
+        <div class="screen-group">
+          <p>Tutor</p>
+          <button data-link="tutor-dashboard">Tutor dashboard</button>
+          <button data-link="tutor-guide">Tutor lesson guide</button>
+          <button data-link="attendance">Attendance</button>
+          <button data-link="review">Project review</button>
+        </div>
+        <div class="screen-group">
+          <p>Parent and admin</p>
+          <button data-link="parent-dashboard">Parent dashboard</button>
+          <button data-link="admin-dashboard">Admin dashboard</button>
+          <button data-link="mission-management">Mission management</button>
+          <button data-link="user-management">User and cohorts</button>
+        </div>
+      </aside>
+
+      <div class="mobile-topbar">
+        <a class="brand compact" href="#landing" data-link="landing">
+          <span class="brand-mark">IB</span>
+          <strong>IATECH Builder</strong>
+        </a>
+        <select id="screenSelect" aria-label="Choose screen"></select>
+      </div>
+
+      <main id="main" class="stage" tabindex="-1">
+        <div id="app" aria-live="polite"></div>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

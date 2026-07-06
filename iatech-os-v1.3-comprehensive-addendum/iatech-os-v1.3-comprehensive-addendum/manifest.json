@@ -1,0 +1,31 @@
+{
+  "package": "iatech-os-v1.3-comprehensive-addendum",
+  "created": "2026-07-05",
+  "supersedes": "v1.2 addendum",
+  "files": [
+    "README.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/README.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/ADR-002-core-learning-model.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/ADR-003-expanded-capability-framework.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/updated-mvp-scope.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/ai-accelerated-learning-framework.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/ai-independence-score.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/professional-ai-communication-and-prompting.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/ai-assisted-development.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/data-analysis-skill-domain.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/business-process-analysis-domain.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/cms-no-code-web-building-domain.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/hardware-automation-robotics-domain.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/mission-engine-2.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/updated-database-model.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/updated-ai-assistant-modes.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/updated-portfolio-evidence-framework.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/codex-v1.3-update-instructions.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/prompt-engineering-coach.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/ai-assisted-development-coach.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/data-analysis-tutor.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/business-process-coach.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/cms-wordpress-tutor.md",
+    "docs/90-ADDITIONS/2026-07-05-v1.3-core-learning-update/prompts/robotics-automation-tutor.md"
+  ]
+}

@@ -1,0 +1,12 @@
+_project_review/
+.next/
+node_modules/
+out/
+dist/
+.env*.local
+.codex/
+tsconfig.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
