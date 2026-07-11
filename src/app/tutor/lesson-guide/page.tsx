@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Chip } from "@/components/ui";
-import { lesson } from "@/lib/mock-data";
+import { getMissionLesson } from "@/lib/domain";
 
-export default function TutorLessonGuidePage() {
+export default async function TutorLessonGuidePage() {
+  const lesson = await getMissionLesson("never-count-twice");
   return (
     <div className="page">
       <section className="panel">
@@ -16,7 +17,7 @@ export default function TutorLessonGuidePage() {
         <div className="two-column" style={{ marginTop: 28 }}>
           <section className="inset">
             <h2>Opening story</h2>
-            <p>{lesson.story}</p>
+            <div className="lesson-content">{lesson?.body ?? "Use the mission problem to introduce the foundation."}</div>
             <h2>Socratic questions</h2>
             <ul>
               <li>What is the real problem: counting, recording, or remembering?</li>
@@ -25,12 +26,8 @@ export default function TutorLessonGuidePage() {
             </ul>
           </section>
           <aside className="panel">
-            <h2>Common mistakes</h2>
-            <ul>
-              {lesson.mistakes.map((mistake) => (
-                <li key={mistake}>{mistake}</li>
-              ))}
-            </ul>
+            <h2>Tutor guidance</h2>
+            <p>{lesson?.tutorGuidance}</p>
             <div className="actions">
               <Link className="btn primary" href="/tutor/review">
                 Go to review queue

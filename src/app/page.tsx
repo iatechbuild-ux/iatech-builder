@@ -10,10 +10,10 @@ export default function LandingPage() {
           <strong>IATECH Builder</strong>
         </Link>
         <div className="actions" style={{ marginTop: 0 }}>
-          <Link className="btn secondary" href="/tutor/dashboard">
+          <Link className="btn secondary" href="/login">
             Log in
           </Link>
-          <Link className="btn primary" href="/student/assessment">
+          <Link className="btn primary" href="/signup">
             Get started
           </Link>
         </div>
@@ -28,7 +28,7 @@ export default function LandingPage() {
             real problems - then prove what you can understand, rebuild, master, and teach.
           </p>
           <div className="actions" style={{ justifyContent: "center" }}>
-            <Link className="btn primary hero-cta" href="/student/assessment">
+            <Link className="btn primary hero-cta" href="/signup">
               Start your first mission
             </Link>
           </div>

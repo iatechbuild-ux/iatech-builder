@@ -2,21 +2,35 @@
   "name": "iatech-builder",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
-    "dev": "next dev",
+    "dev": "node --use-system-ca ./node_modules/next/dist/bin/next dev",
+    "dev:default-ca": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "start:system-ca": "node --use-system-ca ./node_modules/next/dist/bin/next start",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "next": "13.5.11",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@radix-ui/react-slot": "1.3.0",
+    "@supabase/ssr": "0.12.0",
+    "@supabase/supabase-js": "2.110.2",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "lucide-react": "1.24.0",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "tailwind-merge": "3.6.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "typescript": "^5.3.0"
+    "@tailwindcss/postcss": "4.3.2",
+    "@types/node": "24.10.2",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "tailwindcss": "4.3.2",
+    "typescript": "5.9.3"
   }
 }

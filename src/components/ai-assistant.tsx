@@ -3,21 +3,26 @@
 import { useState } from "react";
 
 const modes = [
-  "AI-Assisted Development Coach",
-  "Prompt Engineering Coach",
+  "General Learning Tutor",
+  "Critical Thinking Coach",
+  "Problem Solving Coach",
+  "Systems Thinking Coach",
   "Business Process Coach",
+  "Prompt Engineering Coach",
+  "AI-Assisted Development Coach",
+  "Web Development Tutor",
   "Python Tutor",
   "Data Analysis Tutor",
   "CMS and WordPress Tutor",
   "Robotics and Automation Tutor",
+  "Debugging Coach",
   "Reflection Coach",
+  "Deployment Coach",
+  "Presentation Coach",
 ];
 
-const stages = ["Experience", "Understand", "Rebuild", "Master", "Teach"];
-
-export function AiAssistantPanel() {
+export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { missionSlug: string; missionTitle: string; stage: string }) {
   const [mode, setMode] = useState(modes[0]);
-  const [stage, setStage] = useState("Rebuild");
   const [message, setMessage] = useState(
     "I have a first stock counter idea, but I need help rebuilding it so I understand the loop.",
   );
@@ -34,9 +39,9 @@ export function AiAssistantPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode,
-          stage,
           message,
-          missionTitle: "Never count twice",
+          missionSlug,
+          missionTitle,
         }),
       });
       const data = await response.json();
@@ -54,7 +59,9 @@ export function AiAssistantPanel() {
     <section className="panel ai-panel">
       <div className="toolbar" style={{ justifyContent: "space-between" }}>
         <span className="chip purple">AI Learning Assistant</span>
-        <span className="meta">{provider ? `Provider: ${provider}` : "Groq when key is configured"}</span>
+        <span className="meta">
+          {provider ? `Provider: ${provider}` : "OpenRouter when configured; local fallback otherwise"}
+        </span>
       </div>
 
       <div className="two-column compact-grid" style={{ marginTop: 18 }}>
@@ -66,14 +73,11 @@ export function AiAssistantPanel() {
             ))}
           </select>
         </label>
-        <label className="field">
+        <div className="field">
           <span>Learning stage</span>
-          <select value={stage} onChange={(event) => setStage(event.target.value)}>
-            {stages.map((item) => (
-              <option key={item}>{item}</option>
-            ))}
-          </select>
-        </label>
+          <strong>{stage}</strong>
+          <small className="meta">Set by your mission progress</small>
+        </div>
       </div>
 
       <label className="field" style={{ marginTop: 16 }}>

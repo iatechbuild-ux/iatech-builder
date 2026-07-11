@@ -1,10 +1,13 @@
 import Link from "next/link";
-import { BadgeCard, Chip, LabCard, MissionCard, ProjectCard } from "@/components/ui";
-import { badges, learningLabs, missions, projects, students } from "@/lib/mock-data";
+import { ArrowRight, Award, BriefcaseBusiness } from "lucide-react";
+import { Chip, LabCard, MissionCard, ProgressBar } from "@/components/ui";
+import { getLearningLabs } from "@/lib/domain";
+import { getStudentDashboardData } from "@/lib/platform";
 
-export default function StudentDashboardPage() {
-  const student = students[0];
-  const currentMission = missions.find((mission) => mission.id === student.currentMissionId) ?? missions[0];
+export default async function StudentDashboardPage() {
+  const [student, learningLabs] = await Promise.all([getStudentDashboardData(), getLearningLabs()]);
+
+  if (!student) return null;
 
   return (
     <div className="page narrow-page">
@@ -13,14 +16,26 @@ export default function StudentDashboardPage() {
           <div>
             <p className="big-meta">Good afternoon</p>
             <div className="toolbar">
-              <h1 className="page-title">{student.shortName}</h1>
+              <h1 className="page-title">{student.firstName}</h1>
               <Chip tone="teal">{student.pathway}</Chip>
             </div>
           </div>
-          <div className="avatar">A</div>
+          <div className="avatar" aria-label={`${student.firstName}'s initials`}>{student.initials}</div>
         </header>
 
-        <MissionCard mission={currentMission} primaryHref="/missions/never-count-twice" />
+        <section className="next-action-band">
+          <div><span className="eyebrow">Next required action</span><h2>{student.nextAction.label}</h2><p>{student.nextAction.detail}</p></div>
+          <Link className="btn primary" href={student.nextAction.href}>{student.nextAction.label}<ArrowRight aria-hidden="true" size={18} /></Link>
+        </section>
+
+        {student.activeMission ? <div style={{ marginTop: 20 }}><MissionCard mission={student.activeMission} primaryHref={`/missions/${student.activeMission.slug}`} /></div> : null}
+
+        <section style={{ marginTop: 30 }}>
+          <div className="toolbar" style={{ justifyContent: "space-between" }}><h2>Capability progress</h2><span className="meta">Evidence-backed, not lesson completion</span></div>
+          <div className="capability-list">
+            {student.capabilities.map((capability) => <article className="capability-row" key={capability.name}><div><strong>{capability.name}</strong><span className="meta">{capability.evidenceCount} skill area(s) with reviewed evidence</span></div><div><span className="big-meta">{capability.score}%</span><ProgressBar value={capability.score} /></div></article>)}
+          </div>
+        </section>
 
         <section className="panel ai-panel" style={{ marginTop: 24 }}>
           <div className="toolbar" style={{ justifyContent: "space-between" }}>
@@ -30,7 +45,7 @@ export default function StudentDashboardPage() {
                 Use AI to start faster, then prove what you understand, rebuild, and can teach.
               </p>
             </div>
-            <Chip tone="teal">Level {student.aiIndependenceScore}</Chip>
+            <Chip tone="teal">Independence {student.aiIndependenceScore}/4</Chip>
           </div>
           <div className="actions">
             <Link className="btn ai" href="/student/assistant">
@@ -50,11 +65,7 @@ export default function StudentDashboardPage() {
 
         <section style={{ marginTop: 30 }}>
           <h2>Your badges</h2>
-          <div className="chip-row">
-            {badges.slice(0, 3).map((badge) => (
-              <BadgeCard badge={badge} key={badge.name} />
-            ))}
-          </div>
+          {student.badges.length ? <div className="compact-cards">{student.badges.map((badge) => <article className="mini-evidence" key={badge.id}><Award aria-hidden="true" size={20} /><div><strong>{badge.name}</strong><p className="meta">{badge.description}</p></div></article>)}</div> : <div className="empty-state"><Award aria-hidden="true" /><p>Your first badge appears after a tutor approves capability evidence.</p></div>}
         </section>
 
         <section style={{ marginTop: 30 }}>
@@ -64,17 +75,7 @@ export default function StudentDashboardPage() {
               See all
             </Link>
           </div>
-          <Link className="list-row" href="/student/portfolio">
-            <div>
-              <strong>This is me - profile site</strong>
-              <p className="meta">Approved - 2 competencies</p>
-            </div>
-            <span className="meta">Open</span>
-          </Link>
-        </section>
-
-        <section style={{ marginTop: 18 }}>
-          <ProjectCard project={projects[2]} />
+          {student.portfolio.length ? student.portfolio.map((item) => <Link className="list-row" href="/student/portfolio" key={item.id}><div><strong>{item.title}</strong><p className="meta">{item.skills.join(" · ") || "Approved capability evidence"}</p></div><span className="meta">Open</span></Link>) : <div className="empty-state"><BriefcaseBusiness aria-hidden="true" /><p>Approved submissions become private portfolio projects automatically.</p></div>}
         </section>
       </section>
     </div>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { AiAssistantPanel } from "@/components/ai-assistant";
+import { LearningLabWorkspace } from "@/components/learning-lab-workspace";
 import { Chip, TextField } from "@/components/ui";
-import type { LearningLab } from "@/lib/mock-data";
+import type { LearningLab } from "@/lib/domain/ui-models";
 
 export function LearningLabPage({ lab }: { lab: LearningLab }) {
   const labTone = lab.capability === "Build" ? "teal" : lab.capability === "Lead" ? "coral" : "amber";
@@ -29,12 +30,7 @@ export function LearningLabPage({ lab }: { lab: LearningLab }) {
 
             <article className="panel">
               <h2>Guided activities</h2>
-              {lab.activities.map((activity, index) => (
-                <label className={`option-card ${index < 2 ? "selected" : ""}`} key={activity}>
-                  <span>{activity}</span>
-                  <input type="checkbox" defaultChecked={index < 2} />
-                </label>
-              ))}
+              <LearningLabWorkspace lab={lab} />
             </article>
 
             <article className="panel">
@@ -59,7 +55,7 @@ export function LearningLabPage({ lab }: { lab: LearningLab }) {
                 placeholder="Write one assumption, missing risk, or question to verify."
               />
             </section>
-            <AiAssistantPanel />
+            <AiAssistantPanel missionSlug={lab.slug} missionTitle={lab.title} stage="Experience" />
           </aside>
         </div>
       </section>

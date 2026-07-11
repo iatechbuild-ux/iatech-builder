@@ -94,3 +94,10 @@ Append-only. Each decision has: statement, reason, impact, and — where relevan
 **Decision:** Data Analysis, CMS/No-Code Web Building, and Virtual Robotics/Automation appear as live guided screens in the MVP.
 **Reason:** The Future Builder framework must be visible to learners, not only modeled in admin data.
 **Impact:** Add Data Lab, CMS Planner, and Automation Lab as guided workspaces with prompts, activities, and evidence requirements.
+
+## Decision 017 (v1.4 implementation) - Limited provider-agnostic AI Assistant
+**Decision:** The MVP includes a limited IATECH Learning Assistant behind a provider-agnostic service layer. OpenRouter is the preferred gateway, with a low-cost/free Gemini Flash-class model configured by environment variables. Local fallback responses remain required when no provider key is available.
+**Reason:** The v1.3 learning model depends on stage-aware AI support, but the product must avoid paid-provider lock-in, uncontrolled AI spend, and learner dependence.
+**Impact:** Supersedes older "no in-app chatbot" implementation guidance while preserving the no-AI-grading, no-full-project-generation, no-tutor-replacement rules. Assistant behavior must be mode-aware, stage-aware, logged for tutor review, and constrained to thinking, hints, debugging support, prompting coaching, reflection, and explanation.
+**Supersedes/clarifies:** Decision 001 for the narrow case of a limited free/low-cost assistant; Decision 015 by replacing the Groq-specific direction with a provider-agnostic OpenRouter-first direction.
+**Revisit when:** free/low-cost limits are exceeded, safeguarding requirements change, or IATECH approves a funded AI budget.

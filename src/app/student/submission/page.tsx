@@ -1,64 +1,18 @@
-import Link from "next/link";
-import { Chip, TextField } from "@/components/ui";
-import { aiIndependenceLevels, missions, projects } from "@/lib/mock-data";
+import { SubmissionForm } from "@/components/submission-form";
+import { Chip } from "@/components/ui";
+import { getOrCreateSubmissionDraft } from "@/lib/platform";
 
-export default function ProjectSubmissionPage() {
-  const project = projects[2];
-  const mission = missions[0];
+export default async function ProjectSubmissionPage() {
+  const draft = await getOrCreateSubmissionDraft("never-count-twice");
 
   return (
     <div className="page narrow-page">
       <section className="phone-shell">
-        <p className="notice">
-          You're offline. Your draft is saved on this device and will upload when you're back.
-        </p>
-
-        <h1 className="page-title">Submit: never count twice</h1>
-        <p className="page-lead">Show your work - your tutor reviews evidence from every learning stage.</p>
-
-        <section className="form-grid" style={{ marginTop: 28 }}>
-          <div>
-            <h2>Screenshot of it running</h2>
-            <div className="upload-zone">Tap to add a screenshot</div>
-          </div>
-          <TextField label="GitHub link (optional for Build missions)" value={project.githubUrl} />
-          <TextField label="Live link (Ship missions only)" value="Not needed for this mission" />
-          <TextField
-            textarea
-            label="Your reflection"
-            placeholder="What worked? What failed? What would you improve next time?"
-          />
-          <TextField
-            textarea
-            label="Teach-back explanation"
-            placeholder="Explain loops and the AI mistake in your own words."
-          />
-          <div className="list-row active">
-            <strong>AI assistant transcript</strong>
-            <span>Added from assistant</span>
-          </div>
-          <div className="panel">
-            <h2>AI Independence Score</h2>
-            <Chip tone="teal">{aiIndependenceLevels[2]}</Chip>
-            <p className="meta">What AI helped with, what you rebuilt, and what you can explain.</p>
-          </div>
-          <div className="panel">
-            <h2>Evidence requirements</h2>
-            <div className="chip-row">
-              {mission.evidenceRequirements.map((item, index) => (
-                <Chip tone={item.toLowerCase().includes("ai") ? "purple" : index % 2 === 0 ? "teal" : "amber"} key={item}>
-                  {item}
-                </Chip>
-              ))}
-            </div>
-          </div>
+        <div className="toolbar" style={{ justifyContent: "space-between" }}><div><p className="big-meta">Evidence package</p><h1 className="page-title">{draft ? draft.missionTitle : "Project submission"}</h1></div>{draft ? <Chip tone={draft.missionTier === "ship" ? "coral" : "teal"}>{draft.missionTier} mission</Chip> : null}</div>
+        <p className="page-lead">Show the artifact, your reasoning, what AI contributed, and what you can explain independently.</p>
+        <section style={{ marginTop: 28 }}>
+          {draft ? <SubmissionForm draft={draft} /> : <div className="empty-state"><h2>No editable submission</h2><p>Start the mission or wait for your tutor's review before editing evidence.</p></div>}
         </section>
-
-        <div className="actions">
-          <Link className="btn primary" href="/student/portfolio">
-            Submit for review
-          </Link>
-        </div>
       </section>
     </div>
   );

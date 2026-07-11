@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Chip, TextField } from "@/components/ui";
-import { lesson, missions } from "@/lib/mock-data";
+import { Chip } from "@/components/ui";
+import { getMissionBySlug, getMissionLesson } from "@/lib/domain";
 
-export default function LessonPage() {
-  const mission = missions[0];
+export default async function LessonPage() {
+  const [mission, lesson] = await Promise.all([getMissionBySlug("never-count-twice"), getMissionLesson("never-count-twice")]);
 
   return (
     <div className="page narrow-page">
@@ -15,27 +15,17 @@ export default function LessonPage() {
           <Chip tone="teal">Understand stage</Chip>
           <Chip tone="amber">Foundation before mastery</Chip>
         </div>
-        <h1 className="page-title">{lesson.title}</h1>
-        <p className="page-lead">{lesson.objective}</p>
+        <h1 className="page-title">{lesson?.title ?? "Understand the foundation"}</h1>
+        <p className="page-lead">{lesson?.objective ?? mission?.foundationLesson}</p>
 
         <div className="inset" style={{ marginTop: 24 }}>
-          <p>
-            <strong>The story:</strong> {lesson.story}
-          </p>
-        </div>
-
-        <pre className="code-block">{lesson.example}</pre>
-
-        <div className="panel warning-panel">
-          <h2>Predict before you run</h2>
-          <p>If stock has 5 items, what will this print?</p>
-          <TextField label="Your prediction" placeholder="Type your answer before checking" />
+          <div className="lesson-content">{lesson?.body ?? "Read the problem, inspect the example, and explain what each step changes."}</div>
         </div>
 
         <div className="panel" style={{ marginTop: 18 }}>
           <h2>After this lesson</h2>
-          <p>{mission.rebuildTask}</p>
-          <p className="meta">Mastery challenge: {mission.masteryChallenge}</p>
+          <p>{mission?.rebuildTask ?? "Rebuild the solution with increasing independence."}</p>
+          <p className="meta">Mastery challenge: {mission?.masteryChallenge ?? "Apply the same idea to a new problem."}</p>
         </div>
 
         <div className="actions">

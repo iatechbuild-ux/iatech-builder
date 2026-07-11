@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Chip, TextField } from "@/components/ui";
-import { aiPrompt, missions } from "@/lib/mock-data";
+import { getMissionBySlug } from "@/lib/domain";
 
-export default function BuildWorkspacePage() {
-  const mission = missions[0];
+export default async function BuildWorkspacePage() {
+  const mission = await getMissionBySlug("never-count-twice");
+  if (!mission) return null;
 
   return (
     <div className="page narrow-page">
@@ -43,7 +44,7 @@ export default function BuildWorkspacePage() {
               Ask assistant
             </Link>
           </div>
-          <p className="page-lead">"{aiPrompt}"</p>
+          <p className="page-lead">"{mission.aiSprint}"</p>
           <p className="safety">
             Never share passwords, addresses, or private family info with AI tools.
           </p>

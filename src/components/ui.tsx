@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { Badge, LearningLab, Mission, Project, Submission } from "@/lib/mock-data";
+import type { Badge, LearningLab, Mission, Project, Submission } from "@/lib/domain/ui-models";
 
 const flow = ["Experience", "Understand", "Rebuild", "Master", "Teach"];
 
@@ -127,12 +127,13 @@ export function StageRail({ mission }: { mission: Mission }) {
     <div className="stage-rail" aria-label="Mission learning stages">
       {mission.stages.map((stage) => (
         <article className={`stage-card ${stage.status}`} key={stage.stage}>
-          <Chip tone={stage.status === "current" || stage.status === "done" ? "teal" : "neutral"}>
+          <Chip tone={stage.status === "current" || stage.status === "done" ? "teal" : stage.status === "revision_requested" ? "amber" : "neutral"}>
             {stage.stage}
           </Chip>
           <h3>{stage.title}</h3>
           <p>{stage.instructions}</p>
           <span className="meta">Evidence: {stage.evidence}</span>
+          <span className="meta">Status: {stage.status.replaceAll("_", " ")}</span>
         </article>
       ))}
     </div>

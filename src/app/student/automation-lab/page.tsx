@@ -1,7 +1,9 @@
 import { LearningLabPage } from "@/components/learning-lab-page";
-import { learningLabs } from "@/lib/mock-data";
+import { notFound } from "next/navigation";
+import { getLearningLabs } from "@/lib/domain";
 
-export default function AutomationLabPage() {
-  const lab = learningLabs.find((item) => item.slug === "automation-lab") ?? learningLabs[0];
+export default async function AutomationLabPage() {
+  const lab = (await getLearningLabs()).find((item) => item.slug === "automation-lab");
+  if (!lab) notFound();
   return <LearningLabPage lab={lab} />;
 }
