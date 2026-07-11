@@ -1,12 +1,14 @@
 _project_review/
 .next/
 node_modules/
+.npm-cache/
 out/
 dist/
 .env*.local
 .codex/
 tsconfig.tsbuildinfo
 npm-debug.log*
+tmp-*.log
 dev-server*.log
 yarn-debug.log*
 yarn-error.log*

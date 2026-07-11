@@ -19,6 +19,7 @@ The functional scaffold lives in `src/` and uses:
 - Next.js App Router
 - React
 - TypeScript
+- Tailwind CSS / shadcn-ready design tokens
 - Reusable CSS in `src/app/globals.css`
 - Mock data in `src/lib/mock-data.ts`
 - Reusable components in `src/components/ui.tsx`
@@ -50,16 +51,19 @@ npm install
 npm run dev
 ```
 
+Runtime requirement: Node.js `20.9.0` or newer.
+
 Optional AI assistant configuration:
 
 ```bash
-GROQ_API_KEY=your_free_groq_key
-GROQ_MODEL=llama-3.1-8b-instant
+AI_PROVIDER=openrouter
+OPENROUTER_API_KEY=your_openrouter_key
+AI_MODEL=your_low_cost_gemini_flash_class_model
 ```
 
-Without `GROQ_API_KEY`, the assistant route returns a safe local fallback so the MVP remains demoable.
+Without an AI provider key, the assistant route should return a safe local fallback so the MVP remains demoable.
 
-Current local note: this machine is on Node `16.20.2`, so `package.json` targets a Node-16-compatible Next.js baseline. npm registry access may still require fixing the local certificate chain if `npm install` reports `UNABLE_TO_VERIFY_LEAF_SIGNATURE`.
+Current local note: the system Node on this machine is `16.20.2`, while the Codex bundled runtime has Node `24.14.0`. The old `package-lock.json` was removed because it still described the Next 13 scaffold. Regenerate a fresh lockfile with `npm install` after the local npm registry certificate/proxy issue is fixed.
 
 ## Static prototype
 
