@@ -1,18 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { AppNavigation, type NavigationGroup } from "@/components/app-navigation";
 import { PwaRegister } from "@/components/pwa-register";
-import { SignOutButton } from "@/components/sign-out-button";
-import { roleHomePath, type AppRole } from "@/lib/auth/roles";
+import type { AppRole } from "@/lib/auth/roles";
 import { getCurrentUser } from "@/lib/auth/session";
 import "./globals.css";
 
-type NavGroup = {
-  label: string;
-  links: Array<[string, string]>;
-};
-
-const roleNavGroups: Record<AppRole, NavGroup[]> = {
+const roleNavGroups: Record<AppRole, NavigationGroup[]> = {
   student: [
     {
       label: "Student",
@@ -66,7 +59,7 @@ const roleNavGroups: Record<AppRole, NavGroup[]> = {
   ],
 };
 
-const publicNavGroups: NavGroup[] = [
+const publicNavGroups: NavigationGroup[] = [
   {
     label: "Access",
     links: [
@@ -86,11 +79,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const user = await getCurrentUser();
   const navGroups = user ? roleNavGroups[user.role] : publicNavGroups;
-  const mobileHref = user ? roleHomePath[user.role] : "/login";
-  const mobileLabel = user ? "Continue" : "Log in";
-
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -105,52 +95,10 @@ try {
         />
       </head>
       <body>
+        <a className="skip-link" href="#main-content">Skip to main content</a>
         <div className="app-shell">
-          <aside className="sidebar" aria-label="Main navigation">
-            <Link className="brand" href="/">
-              <span className="brand-mark">IB</span>
-              <span>
-                <strong>IATECH Builder</strong>
-                <small>Build skills. Solve problems.</small>
-              </span>
-            </Link>
-            {navGroups.map((group) => (
-              <nav className="nav-group" key={group.label} aria-label={group.label}>
-                <p>{group.label}</p>
-                {group.links.map(([label, href]) => (
-                  <Link href={href} key={href}>
-                    {label}
-                  </Link>
-                ))}
-              </nav>
-            ))}
-            {user ? (
-              <section className="nav-group" aria-label="Account">
-                <p>Account</p>
-                <div className="account-card">
-                  <strong>{user.fullName}</strong>
-                  <span>{user.role}</span>
-                </div>
-                <SignOutButton />
-              </section>
-            ) : null}
-            <div className="theme-row">
-              <ThemeToggle />
-            </div>
-          </aside>
-          <div className="mobile-bar">
-            <Link className="brand compact" href="/">
-              <span className="brand-mark">IB</span>
-              <strong>IATECH Builder</strong>
-            </Link>
-            <div className="actions" style={{ marginTop: 0 }}>
-              <ThemeToggle compact />
-              <Link className="mobile-action" href={mobileHref}>
-                {mobileLabel}
-              </Link>
-            </div>
-          </div>
-          <main>{children}</main>
+          <AppNavigation groups={navGroups} user={user ? { fullName: user.fullName, role: user.role } : null} />
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <PwaRegister />
         </div>
       </body>

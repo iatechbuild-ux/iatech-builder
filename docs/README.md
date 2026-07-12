@@ -11,6 +11,8 @@ This repository is the **single source of truth** for **IATECH Builder**, a miss
 
 > Current planning baseline: read the v2.0 docs, then apply the v1.3 core learning addendum at [`90-ADDITIONS/2026-07-05-v1.3-core-learning-update/README.md`](90-ADDITIONS/2026-07-05-v1.3-core-learning-update/README.md).
 
+> Curriculum v3 (2026-07-12) adds the operational course architecture, research alignment, assessment rules, domain blueprints, publication gates, and the first pilot-ready Python sequence. Start at [`40-CURRICULUM/curriculum-architecture-v3.md`](40-CURRICULUM/curriculum-architecture-v3.md).
+
 IATECH Builder is not a course library, a generic LMS, or an AI chatbot. It is a **guided build environment**: learners work through real-world missions where they think, learn only what the mission requires, build a working artifact, deploy it, present it, and reflect. Tutors facilitate. Parents observe outcomes. Admins manage quality.
 
 ## What changed in v2.0

@@ -145,6 +145,35 @@ body {
   line-height: 1.6;
 }
 
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #ffffff;
+  background: var(--brand-solid);
+  text-decoration: none;
+  transform: translateY(-150%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 a {
   color: inherit;
 }
@@ -205,6 +234,12 @@ td a {
   text-decoration: none;
 }
 
+.brand-copy,
+.breakable-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .brand-mark {
   display: grid;
   place-items: center;
@@ -249,6 +284,13 @@ td a {
 .nav-group a:hover {
   color: var(--brand-text);
   background: var(--brand-bg);
+}
+
+.nav-group a.active,
+.nav-group a[aria-current="page"] {
+  color: var(--brand-text);
+  background: var(--brand-bg);
+  font-weight: 600;
 }
 
 .nav-button {
@@ -323,8 +365,13 @@ td a {
   display: none;
 }
 
+.mobile-nav-layer {
+  display: none;
+}
+
 main {
   min-width: 0;
+  scroll-margin-top: 80px;
 }
 
 .page {
@@ -704,6 +751,9 @@ li {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .stage-rail {
@@ -1108,7 +1158,12 @@ details summary {
 }
 
 .table-card {
+  overflow: hidden;
+}
+
+.responsive-table {
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
 }
 
 table {
@@ -1195,7 +1250,7 @@ th {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 10px 14px;
+    padding: max(10px, env(safe-area-inset-top)) 14px 10px;
     border-bottom: 1px solid var(--border);
     background: var(--surface-1);
   }
@@ -1204,16 +1259,66 @@ th {
     margin: 0;
   }
 
-  .mobile-action {
+  .mobile-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mobile-menu-button {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: 8px 12px;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--border-strong);
     border-radius: 10px;
-    color: #ffffff;
-    background: var(--brand-solid);
-    text-decoration: none;
-    font-weight: 500;
+    color: var(--text);
+    background: var(--surface-1);
+    cursor: pointer;
+  }
+
+  .mobile-menu-button:hover {
+    color: var(--brand-text);
+    border-color: var(--brand-soft);
+    background: var(--brand-bg);
+  }
+
+  .mobile-nav-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) min(340px, 88vw);
+  }
+
+  .mobile-nav-backdrop {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background: rgba(0, 0, 0, 0.48);
+    cursor: pointer;
+  }
+
+  .mobile-nav-panel {
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) 20px;
+    border-left: 1px solid var(--border);
+    background: var(--surface-1);
+  }
+
+  .mobile-nav-heading {
+    display: grid;
+    gap: 2px;
+    padding-bottom: 18px;
+  }
+
+  body.mobile-nav-open {
+    overflow: hidden;
   }
 
   .hero-grid,
@@ -1238,6 +1343,13 @@ th {
 }
 
 @media (max-width: 600px) {
+  .mobile-bar .brand strong {
+    display: none;
+  }
+
+  .mobile-nav-layer {
+    grid-template-columns: minmax(0, 1fr) min(320px, 92vw);
+  }
   .hero-page,
   .page,
   .narrow-page {

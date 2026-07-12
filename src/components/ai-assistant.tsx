@@ -59,7 +59,7 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
       <div className="two-column compact-grid" style={{ marginTop: 18 }}>
         <label className="field">
           <span>Assistant mode</span>
-          <select value={mode} onChange={(event) => setMode(event.target.value)}>
+          <select name="assistant_mode" autoComplete="off" value={mode} onChange={(event) => setMode(event.target.value)}>
             {modeGroups.map(([group, items]) => (
               <optgroup key={group} label={group}>
                 {items.map((item) => (
@@ -79,9 +79,11 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
       <label className="field" style={{ marginTop: 16 }}>
         <span>Ask for help</span>
         <textarea
+          name="assistant_question"
+          autoComplete="off"
           value={message}
           onChange={(event) => setMessage(event.target.value)}
-          placeholder="Say what you tried and where you got stuck. Example: my stock counter works, but I need help rebuilding it so I understand the loop."
+          placeholder="Example: My counter works, but I need help understanding the loop…"
         />
       </label>
 
@@ -90,10 +92,12 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
       </p>
 
       <button className="btn ai" type="button" onClick={askAssistant} disabled={loading}>
-        {loading ? "Thinking..." : "Ask assistant"}
+        {loading ? "Thinking…" : "Ask Assistant"}
       </button>
 
-      {answer ? <pre className="assistant-output">{answer}</pre> : null}
+      <div aria-live="polite" aria-atomic="true">
+        {answer ? <pre className="assistant-output">{answer}</pre> : null}
+      </div>
     </section>
   );
 }

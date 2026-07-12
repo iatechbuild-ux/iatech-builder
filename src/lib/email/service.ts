@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createSupabaseAdminClient } from "@/lib/supabase/server";
-import { sendWithBrevo } from "./brevo";
+import { configuredEmailProvider, sendTransactionalEmail } from "./provider";
 import { renderEmail } from "./templates";
 import type { EmailPayload, EmailTemplateKey, QueueEmailInput } from "./types";
 
@@ -30,7 +30,7 @@ export async function deliverOutboxEmail(row: OutboxRow) {
   try {
     const recipient = await resolveRecipient(row);
     if (!recipient) throw new Error("Recipient email could not be resolved.");
-    const messageId = await sendWithBrevo(recipient, renderEmail(row.template_key, row.payload), [row.event_type, `outbox-${row.id}`]);
+    const messageId = await sendTransactionalEmail(recipient, renderEmail(row.template_key, row.payload), row.event_type, row.id);
     await admin.from("email_outbox").update({ status: "sent", provider_message_id: messageId, sent_at: new Date().toISOString(), locked_at: null, last_error: null, updated_at: new Date().toISOString() }).eq("id", row.id);
     return { ok: true as const, messageId };
   } catch (error) {
@@ -44,7 +44,7 @@ export async function deliverOutboxEmail(row: OutboxRow) {
 
 export async function queueEmail(input: QueueEmailInput, sendNow = true) {
   const admin = createSupabaseAdminClient();
-  if (!admin || process.env.EMAIL_PROVIDER !== "brevo") return { ok: false as const, error: "Email service is not configured." };
+  if (!admin || !configuredEmailProvider()) return { ok: false as const, error: "Email service is not configured." };
   const inserted = await admin.from("email_outbox").upsert({
     recipient_id: input.recipientId || null, recipient_email: input.recipientEmail || null, recipient_name: input.recipientName || null,
     event_type: input.eventType, template_key: input.templateKey, payload: input.payload, dedupe_key: input.dedupeKey,

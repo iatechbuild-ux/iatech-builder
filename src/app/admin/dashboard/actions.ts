@@ -57,8 +57,15 @@ export async function createMissionAction(formData: FormData) {
   const targetUsers = textField(formData, "target_users", { required: true, max: 500 });
   const tier = String(formData.get("tier")) === "ship" ? "ship" : "build";
   const status = String(formData.get("status")) === "active" ? "active" : "draft";
-  const { error } = await supabase.from("missions").insert({ title, slug, problem_statement: problem, target_users: targetUsers, tier, status });
-  if (error) throw new FormValidationError(error.message);
+  const result = await supabase.rpc("create_complete_mission", {
+    p_title: title,
+    p_slug: slug,
+    p_problem_statement: problem,
+    p_target_users: targetUsers,
+    p_tier: tier,
+    p_status: status,
+  });
+  if (result.error) throw new FormValidationError(result.error.message);
   revalidatePath("/admin/dashboard");
   revalidatePath("/student/dashboard");
 }

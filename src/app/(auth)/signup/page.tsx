@@ -10,7 +10,6 @@ type SignupPageProps = {
 
 const roles = [
   ["student", "Student"],
-  ["tutor", "Tutor"],
   ["parent", "Parent"],
 ] as const;
 
@@ -23,7 +22,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
         <span className="chip teal">Join the pilot</span>
         <h1 className="page-title">Create an IATECH Builder account</h1>
         <p className="page-lead">
-          Accounts are role-based. Admin accounts should be created by platform administrators.
+          Learners and parents can register here. Tutor and admin access is assigned by a platform administrator.
         </p>
 
         {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
@@ -50,7 +49,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
                 </option>
               ))}
             </select>
-            <small className="meta">Tutor and parent accounts are verified by an administrator before they can access learners.</small>
+            <small className="meta">Parent accounts cannot access learner records until an administrator verifies the family link.</small>
           </label>
           <button className="btn primary" type="submit">
             Create account

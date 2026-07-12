@@ -9,6 +9,12 @@ import { syncProfile } from "@/lib/auth/profile-sync";
 import { sendWelcomeEmail } from "@/lib/email/events";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+const publicSignupRoles = ["student", "parent"] as const;
+
+function isPublicSignupRole(value: string): value is (typeof publicSignupRoles)[number] {
+  return (publicSignupRoles as readonly string[]).includes(value);
+}
+
 function textValue(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -73,7 +79,9 @@ export async function signUpAction(formData: FormData) {
   const password = textValue(formData, "password");
   const fullName = textValue(formData, "fullName");
   const roleValue = textValue(formData, "role");
-  const role: AppRole = isAppRole(roleValue) ? roleValue : "student";
+  // Tutor and admin accounts are privileged and must only be assigned by an
+  // authenticated administrator. Never trust public form data for these roles.
+  const role: AppRole = isPublicSignupRole(roleValue) ? roleValue : "student";
   const supabase = await createSupabaseServerClient();
 
   if (!supabase) {

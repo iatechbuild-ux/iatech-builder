@@ -97,9 +97,10 @@ export function ChipRow({ items }: { items: Array<[string, Tone]> }) {
 }
 
 export function ProgressBar({ value }: { value: number }) {
+  const normalizedValue = Math.min(100, Math.max(0, value));
   return (
-    <div className="progress" aria-label={`${value}% complete`}>
-      <span style={{ width: `${value}%` }} />
+    <div className="progress" role="progressbar" aria-label="Mission progress" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalizedValue}>
+      <span style={{ width: `${normalizedValue}%` }} />
     </div>
   );
 }
@@ -107,18 +108,18 @@ export function ProgressBar({ value }: { value: number }) {
 export function FlowSteps({ currentStep }: { currentStep: string }) {
   const currentIndex = flow.indexOf(currentStep);
   return (
-    <div className="flow-steps" aria-label="Mission learning flow">
+    <ol className="flow-steps" aria-label="Mission learning flow">
       {flow.map((step, index) => {
         const state = index < currentIndex ? "done" : index === currentIndex ? "current" : "locked";
         const doneMark = state === "done" ? " check" : "";
         return (
-          <span className={`step ${state}`} key={step}>
+          <li className={`step ${state}`} key={step} aria-current={state === "current" ? "step" : undefined}>
             {step}
             {doneMark}
-          </span>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }
 
@@ -212,8 +213,11 @@ export function BadgeCard({ badge }: { badge: Badge }) {
 export function SubmissionTable({ submissions }: { submissions: Submission[] }) {
   return (
     <div className="table-card">
-      <h2>Review queue – oldest first</h2>
-      <table>
+      <h2>Review Queue – Oldest First</h2>
+      {submissions.length ? (
+        <div className="responsive-table">
+          <table>
+            <caption className="sr-only">Learner project submissions awaiting tutor review, ordered oldest first</caption>
         <thead>
           <tr>
             <th>Learner</th>
@@ -244,7 +248,11 @@ export function SubmissionTable({ submissions }: { submissions: Submission[] }) 
             </tr>
           ))}
         </tbody>
-      </table>
+          </table>
+        </div>
+      ) : (
+        <div className="empty-state"><p>No submissions are waiting for review.</p></div>
+      )}
     </div>
   );
 }

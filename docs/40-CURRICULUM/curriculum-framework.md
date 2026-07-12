@@ -7,6 +7,8 @@ north_star: Build the simplest, lowest-cost, tutor-guided platform that helps le
 
 # Curriculum Framework
 
+> **v3 implementation note (2026-07-12):** The operational architecture, course outputs, assessment rules, and publication gates now live in [`curriculum-architecture-v3.md`](curriculum-architecture-v3.md), [`course-blueprints-v3.md`](course-blueprints-v3.md), [`assessment-system-v3.md`](assessment-system-v3.md), and [`curriculum-quality-gates-v3.md`](curriculum-quality-gates-v3.md). These documents tighten this framework without changing its problem-first philosophy.
+
 ## Philosophy
 
 IATECH does not teach subjects in isolation. It develops builders through missions. Competencies are the *why*; missions are the *how*; portfolios are the *proof*.

@@ -7,6 +7,8 @@ north_star: Build the simplest, lowest-cost, tutor-guided platform that helps le
 
 # Sample Mission Library
 
+> **v3 implementation note (2026-07-12):** These are idea-level samples. A mission is publishable only after it satisfies [`curriculum-quality-gates-v3.md`](curriculum-quality-gates-v3.md). The first fully specified sequence is [`python-explorer-course-v3.md`](python-explorer-course-v3.md).
+
 > v2.0 re-frames every idea as a *problem*, not a *thing to build*, and tags tier + pathway. This is the seed set to author into full missions using [`mission-template.md`](mission-template.md). Start with **10 excellent ones**, not all of them.
 
 Format: **Mission** — *the problem* · tier · pathway · lead competencies.

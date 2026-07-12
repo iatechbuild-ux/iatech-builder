@@ -51,6 +51,7 @@ export function createOpenRouterProvider(options: OpenRouterProviderOptions): As
           temperature: 0.35,
           max_tokens: 520,
         }),
+        signal: AbortSignal.timeout(15_000),
       });
 
       if (!response.ok) {

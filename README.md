@@ -65,11 +65,13 @@ Without an AI provider key, the assistant route should return a safe local fallb
 
 ### Transactional email
 
-Product email uses Brevo through a server-only adapter and a durable Supabase outbox. Configure `BREVO_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME`, `EMAIL_REPLY_TO`, `BREVO_WEBHOOK_SECRET`, `CRON_SECRET`, and `EMAIL_DAILY_LIMIT` in the deployment environment. The sender address must belong to a domain authenticated in Brevo.
+Product email uses a provider-neutral server adapter and a durable Supabase outbox. Resend is the primary provider; Brevo remains available as fallback. Configure `EMAIL_PROVIDER=resend`, `RESEND_API_KEY`, `RESEND_WEBHOOK_SECRET`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME`, `EMAIL_REPLY_TO`, `CRON_SECRET`, and `EMAIL_DAILY_LIMIT` in the deployment environment. The sender address must belong to a domain verified in Resend. Retries use the outbox ID as Resend's idempotency key, preventing duplicate delivery within Resend's idempotency window.
 
-Supabase Auth emails use the same provider through custom SMTP. In Supabase Dashboard, open **Authentication > Email > SMTP Settings** and enter the Brevo SMTP relay credentials. Keep these separate from `BREVO_API_KEY` and never expose either credential as a `NEXT_PUBLIC_` variable.
+Supabase Auth emails use Resend separately through custom SMTP. In Supabase Dashboard, open **Authentication > Email > SMTP Settings** and configure host `smtp.resend.com`, port `465`, username `resend`, and the Resend API key as the password. Set a sender address on the verified domain. Never expose the API key as a `NEXT_PUBLIC_` variable.
 
-Set the Brevo transactional webhook to `/api/webhooks/brevo?secret=<BREVO_WEBHOOK_SECRET>` and select delivery, bounce, blocked, complaint, and unsubscribe events. Vercel invokes `/api/cron/email` daily using `CRON_SECRET`; transactional messages attempt immediate delivery, while the cron retries failures, sends opted-in inactivity reminders, and sends parent summaries on Mondays.
+Create a Resend webhook targeting `/api/webhooks/resend`, copy its signing secret into `RESEND_WEBHOOK_SECRET`, and subscribe to delivered, bounced, complained, and suppressed events. The handler verifies the raw payload with Resend's Svix signature before recording it. Vercel invokes `/api/cron/email` daily using `CRON_SECRET`; transactional messages attempt immediate delivery, while the cron retries failures, sends opted-in inactivity reminders, and sends parent summaries on Mondays.
+
+For initial testing before domain verification, Resend only permits its test sender and restricted recipients. Do not use the test sender in production. Keep Auth and product/notification mail on separate subdomains or sender addresses when the domain setup allows it, so reputation problems in one stream do not affect the other.
 
 Current local note: the system Node on this machine is `16.20.2`, while the Codex bundled runtime has Node `24.14.0`. The old `package-lock.json` was removed because it still described the Next 13 scaffold. Regenerate a fresh lockfile with `npm install` after the local npm registry certificate/proxy issue is fixed.
 
