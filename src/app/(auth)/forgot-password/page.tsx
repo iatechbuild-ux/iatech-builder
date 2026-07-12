@@ -20,7 +20,7 @@ export default async function ForgotPasswordPage({ searchParams }: ForgotPasswor
           Enter the email you use for IATECH Builder. We will send password reset instructions if it matches an account.
         </p>
 
-        {params?.error ? <p className="notice">{params.error}</p> : null}
+        {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
 
         <form action={requestPasswordResetAction} className="form-grid" style={{ marginTop: 22 }}>
           <label className="field">

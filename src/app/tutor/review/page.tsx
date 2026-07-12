@@ -14,8 +14,8 @@ export default async function ProjectReviewPage({ searchParams }: { searchParams
       <section className="panel">
         <div className="toolbar" style={{ justifyContent: "space-between" }}>
           <div>
-            <h1 className="page-title">{project.studentName} - {project.missionTitle}</h1>
-            <p className="page-lead">{project.missionTier} mission - review round {project.revisions.length + 1}</p>
+            <h1 className="page-title">{project.studentName} – {project.missionTitle}</h1>
+            <p className="page-lead">{project.missionTier} mission – review round {project.revisions.length + 1}</p>
           </div>
           <Chip tone="teal">In review</Chip>
         </div>

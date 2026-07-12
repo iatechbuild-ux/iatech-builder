@@ -26,7 +26,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
           Accounts are role-based. Admin accounts should be created by platform administrators.
         </p>
 
-        {params?.error ? <p className="notice">{params.error}</p> : null}
+        {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
 
         <form action={signUpAction} className="form-grid" style={{ marginTop: 22 }}>
           <label className="field">
@@ -50,6 +50,7 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
                 </option>
               ))}
             </select>
+            <small className="meta">Tutor and parent accounts are verified by an administrator before they can access learners.</small>
           </label>
           <button className="btn primary" type="submit">
             Create account

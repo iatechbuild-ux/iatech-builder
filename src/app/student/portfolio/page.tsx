@@ -7,7 +7,7 @@ export default async function PortfolioPage() {
   const projects = await getStudentPortfolio();
   return (
     <div className="page narrow-page">
-      <section className="phone-shell">
+      <section>
         <div className="toolbar" style={{ justifyContent: "space-between" }}>
           <div>
             <h1 className="page-title">My portfolio</h1>

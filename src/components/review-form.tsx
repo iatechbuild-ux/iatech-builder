@@ -12,6 +12,7 @@ export function ReviewForm({ submissionId, rubric }: { submissionId: string; rub
     <form action={action} className="form-grid">
       <input name="submission_id" type="hidden" value={submissionId} />
       {state.message ? <p className={`form-message ${state.status}`} role="status">{state.message}</p> : null}
+      <p className="meta">Scores: 0 absent · 1 prompted · 2 with guidance · 3 independent · 4 leads others</p>
       <div className="rubric">
         {rubric.map((dimension) => <fieldset className={`rubric-input ${dimension.code === "ai_evaluation" ? "ai-row" : ""}`} key={dimension.code}>
           <input name="dimension" type="hidden" value={dimension.code} />

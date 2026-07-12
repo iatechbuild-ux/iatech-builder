@@ -160,6 +160,20 @@ button {
   touch-action: manipulation;
 }
 
+strong,
+b {
+  font-weight: 500;
+}
+
+.panel p a,
+.card p a,
+.inset p a,
+td a {
+  color: var(--brand-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 :focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
@@ -561,12 +575,6 @@ button:disabled {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
-.phone-shell {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 .panel,
 .card,
 .table-card,
@@ -812,6 +820,7 @@ li {
   gap: 10px;
   padding: 24px;
   border: 1px dashed var(--border-strong);
+  border-radius: 12px;
   background: var(--surface-2);
 }
 
@@ -833,6 +842,7 @@ li {
   place-items: center;
   width: 44px;
   height: 44px;
+  border-radius: 10px;
   color: var(--brand-text);
   background: var(--brand-bg);
 }
@@ -841,6 +851,7 @@ li {
   padding: 12px 14px;
   border-left: 4px solid var(--brand-solid);
   background: var(--brand-bg);
+  color: var(--brand-text);
 }
 
 .form-message.error {
@@ -849,20 +860,14 @@ li {
   background: var(--danger-bg);
 }
 
-.online-note {
-  color: var(--brand-text);
-  border-color: var(--brand-soft);
-  background: var(--brand-bg);
-}
-
 .sticky-actions {
   position: sticky;
   bottom: 10px;
   z-index: 4;
   padding: 12px;
   border: 1px solid var(--border);
-  background: color-mix(in srgb, var(--surface-1) 94%, transparent);
-  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  background: var(--surface-1);
 }
 
 .rubric-input {
@@ -880,7 +885,7 @@ li {
 }
 
 .rubric-input legend {
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .score-options {
@@ -891,11 +896,6 @@ li {
 
 .score-options label {
   position: relative;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--border-strong);
   cursor: pointer;
 }
 
@@ -904,10 +904,24 @@ li {
   opacity: 0;
 }
 
-.score-options label:has(input:checked) {
-  color: #fff;
+.score-options span {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+}
+
+.score-options input:checked + span {
+  color: #ffffff;
   border-color: var(--brand-solid);
   background: var(--brand-solid);
+}
+
+.score-options input:focus-visible + span {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
 .parent-summary {
@@ -1067,8 +1081,10 @@ details summary {
 
 .assistant-output {
   background: var(--surface-1);
-  color: var(--ai-text);
+  color: var(--text);
   border: 1px solid var(--ai-border);
+  font-family: inherit;
+  font-size: 16px;
 }
 
 .lab-card {

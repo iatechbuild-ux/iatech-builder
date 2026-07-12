@@ -59,9 +59,11 @@ export function SubmissionForm({ draft }: { draft: SubmissionDraft }) {
   return (
     <form action={formAction} className="form-grid">
       <input name="submission_id" type="hidden" value={draft.id} />
-      <div className={`notice ${online ? "online-note" : ""}`} role="status">
-        {online ? "Online. Text is also saved on this device while you work." : "Offline. Text is safe on this device; reconnect before uploading a file or sending to your tutor."}
-      </div>
+      {online ? null : (
+        <div className="notice" role="status">
+          You're offline. Your text is safe on this device — reconnect before uploading a file or sending to your tutor.
+        </div>
+      )}
       {state.message ? <p className={`form-message ${state.status}`} role="status">{state.message}</p> : null}
 
       <label className="field"><span>Project title</span><input name="title" value={values.title} onChange={(event) => set("title", event.target.value)} maxLength={120} /></label>
@@ -99,13 +101,19 @@ export function SubmissionForm({ draft }: { draft: SubmissionDraft }) {
       <label className="field"><span>Teach-back</span><textarea name="teach_back" value={values.teachBack} onChange={(event) => set("teachBack", event.target.value)} maxLength={4000} placeholder="Explain the important idea in your own words." /></label>
 
       <section className="panel ai-panel">
-        <label className="option-card selected"><span>I used AI while working on this mission</span><input checked={values.aiUsed} name="ai_used" onChange={(event) => set("aiUsed", event.target.checked)} type="checkbox" /></label>
+        <label className={`option-card${values.aiUsed ? " selected" : ""}`}><span>I used AI while working on this mission</span><input checked={values.aiUsed} name="ai_used" onChange={(event) => set("aiUsed", event.target.checked)} type="checkbox" /></label>
         {values.aiUsed ? <div className="form-grid" style={{ marginTop: 16 }}>
           <label className="field"><span>Prompt used</span><textarea name="ai_prompt" value={values.aiPrompt} onChange={(event) => set("aiPrompt", event.target.value)} maxLength={4000} /></label>
           <label className="field"><span>AI response</span><textarea name="ai_output" value={values.aiOutput} onChange={(event) => set("aiOutput", event.target.value)} maxLength={8000} /></label>
           <label className="field"><span>What was useful?</span><textarea name="ai_useful" value={values.aiUseful} onChange={(event) => set("aiUseful", event.target.value)} maxLength={2000} /></label>
           <label className="field"><span>What was wrong, missing, or assumed?</span><textarea name="ai_wrong" value={values.aiWrong} onChange={(event) => set("aiWrong", event.target.value)} maxLength={2000} /></label>
-          <label className="field"><span>AI independence level: {values.aiIndependenceScore}</span><input max="4" min="1" name="ai_independence_score" onChange={(event) => set("aiIndependenceScore", Number(event.target.value))} type="range" value={values.aiIndependenceScore} /></label>
+          <label className="field">
+            <span>
+              How independent were you? {values.aiIndependenceScore} –{" "}
+              {["AI did most of it", "AI helped a lot", "AI helped a little", "I worked independently"][values.aiIndependenceScore - 1] ?? "AI helped a lot"}
+            </span>
+            <input max="4" min="1" name="ai_independence_score" onChange={(event) => set("aiIndependenceScore", Number(event.target.value))} step="1" type="range" value={values.aiIndependenceScore} />
+          </label>
         </div> : <input name="ai_independence_score" type="hidden" value="1" />}
       </section>
 

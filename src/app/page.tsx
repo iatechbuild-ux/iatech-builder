@@ -21,7 +21,7 @@ export default function LandingPage() {
 
       <section className="hero-stage">
         <div className="hero-copy">
-          <Chip tone="teal">Tutor-guided - ages 10-18</Chip>
+          <Chip tone="teal">Tutor-guided – ages 10–18</Chip>
           <h1>Don't just take lessons. Complete missions. Build real things.</h1>
           <p>
             Learn web development, Python, data, CMS, automation, and smart AI skills by solving

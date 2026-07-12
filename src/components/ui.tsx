@@ -154,7 +154,7 @@ export function MissionCard({ mission, primaryHref }: { mission: Mission; primar
         <p className="muted">{mission.problem}</p>
       </div>
       <ProgressBar value={mission.progress} />
-      <Link className="btn primary" href={primaryHref}>
+      <Link className="btn secondary" href={primaryHref}>
         {mission.currentStage === "Rebuild" ? "Continue rebuilding" : "Continue mission"}
       </Link>
     </article>
@@ -212,7 +212,7 @@ export function BadgeCard({ badge }: { badge: Badge }) {
 export function SubmissionTable({ submissions }: { submissions: Submission[] }) {
   return (
     <div className="table-card">
-      <h2>Review queue - oldest first</h2>
+      <h2>Review queue – oldest first</h2>
       <table>
         <thead>
           <tr>

@@ -8,7 +8,7 @@ export default async function BuildWorkspacePage() {
 
   return (
     <div className="page narrow-page">
-      <section className="phone-shell">
+      <section>
         <div className="toolbar" style={{ justifyContent: "space-between" }}>
           <h1 className="page-title">Rebuild workspace</h1>
           <Chip tone="teal">Stage: Rebuild</Chip>

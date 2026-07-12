@@ -23,8 +23,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           Pick up your missions, reviews, and progress where you left off.
         </p>
 
-        {params?.error ? <p className="notice">{params.error}</p> : null}
-        {params?.notice ? <p className="notice">{params.notice}</p> : null}
+        {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
+        {params?.notice ? <p className="form-message" role="status">{params.notice}</p> : null}
 
         <form action={signInAction} className="form-grid" style={{ marginTop: 22 }}>
           <input name="next" type="hidden" value={next} />

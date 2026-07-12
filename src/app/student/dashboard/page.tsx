@@ -11,7 +11,7 @@ export default async function StudentDashboardPage() {
 
   return (
     <div className="page narrow-page">
-      <section className="phone-shell">
+      <section>
         <header className="dashboard-top">
           <div>
             <p className="big-meta">Good afternoon</p>
@@ -25,7 +25,7 @@ export default async function StudentDashboardPage() {
 
         <section className="next-action-band">
           <div><span className="eyebrow">Next required action</span><h2>{student.nextAction.label}</h2><p>{student.nextAction.detail}</p></div>
-          <Link className="btn primary" href={student.nextAction.href}>{student.nextAction.label}<ArrowRight aria-hidden="true" size={18} /></Link>
+          <Link className="btn primary" href={student.nextAction.href}>Continue<ArrowRight aria-hidden="true" size={18} /></Link>
         </section>
 
         {student.activeMission ? <div style={{ marginTop: 20 }}><MissionCard mission={student.activeMission} primaryHref={`/missions/${student.activeMission.slug}`} /></div> : null}
@@ -33,7 +33,7 @@ export default async function StudentDashboardPage() {
         <section style={{ marginTop: 30 }}>
           <div className="toolbar" style={{ justifyContent: "space-between" }}><h2>Capability progress</h2><span className="meta">Evidence-backed, not lesson completion</span></div>
           <div className="capability-list">
-            {student.capabilities.map((capability) => <article className="capability-row" key={capability.name}><div><strong>{capability.name}</strong><span className="meta">{capability.evidenceCount} skill area(s) with reviewed evidence</span></div><div><span className="big-meta">{capability.score}%</span><ProgressBar value={capability.score} /></div></article>)}
+            {student.capabilities.map((capability) => <article className="capability-row" key={capability.name}><div><strong>{capability.name}</strong><span className="meta">{capability.evidenceCount === 1 ? "1 skill area" : `${capability.evidenceCount} skill areas`} with reviewed evidence</span></div><div><span className="meta">{capability.score}%</span><ProgressBar value={capability.score} /></div></article>)}
           </div>
         </section>
 

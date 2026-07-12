@@ -20,7 +20,7 @@ export default async function ResetPasswordPage({ searchParams }: ResetPasswordP
           Use the reset link from your email first, then set a password with at least 8 characters.
         </p>
 
-        {params?.error ? <p className="notice">{params.error}</p> : null}
+        {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
 
         <form action={updatePasswordAction} className="form-grid" style={{ marginTop: 22 }}>
           <label className="field">

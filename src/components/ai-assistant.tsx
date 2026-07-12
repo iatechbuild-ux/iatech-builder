@@ -2,30 +2,22 @@
 
 import { useState } from "react";
 
-const modes = [
-  "General Learning Tutor",
-  "Critical Thinking Coach",
-  "Problem Solving Coach",
-  "Systems Thinking Coach",
-  "Business Process Coach",
-  "Prompt Engineering Coach",
-  "AI-Assisted Development Coach",
-  "Web Development Tutor",
-  "Python Tutor",
-  "Data Analysis Tutor",
-  "CMS and WordPress Tutor",
-  "Robotics and Automation Tutor",
-  "Debugging Coach",
-  "Reflection Coach",
-  "Deployment Coach",
-  "Presentation Coach",
+const modeGroups: Array<[string, string[]]> = [
+  ["Thinking", ["General Learning Tutor", "Critical Thinking Coach", "Problem Solving Coach", "Systems Thinking Coach", "Business Process Coach"]],
+  ["Building", ["Web Development Tutor", "Python Tutor", "AI-Assisted Development Coach", "Prompt Engineering Coach", "Debugging Coach", "Deployment Coach"]],
+  ["Data and CMS", ["Data Analysis Tutor", "CMS and WordPress Tutor", "Robotics and Automation Tutor"]],
+  ["Support", ["Reflection Coach", "Presentation Coach"]],
 ];
 
+const providerLabels: Record<string, string> = {
+  openrouter: "Online help",
+  local: "Offline practice mode",
+  "local-error": "Offline practice mode",
+};
+
 export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { missionSlug: string; missionTitle: string; stage: string }) {
-  const [mode, setMode] = useState(modes[0]);
-  const [message, setMessage] = useState(
-    "I have a first stock counter idea, but I need help rebuilding it so I understand the loop.",
-  );
+  const [mode, setMode] = useState(modeGroups[0][1][0]);
+  const [message, setMessage] = useState("");
   const [answer, setAnswer] = useState("");
   const [provider, setProvider] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,7 +52,7 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
       <div className="toolbar" style={{ justifyContent: "space-between" }}>
         <span className="chip purple">AI Learning Assistant</span>
         <span className="meta">
-          {provider ? `Provider: ${provider}` : "OpenRouter when configured; local fallback otherwise"}
+          {provider ? providerLabels[provider] ?? "Online help" : "Stage-aware help for your mission"}
         </span>
       </div>
 
@@ -68,8 +60,12 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
         <label className="field">
           <span>Assistant mode</span>
           <select value={mode} onChange={(event) => setMode(event.target.value)}>
-            {modes.map((item) => (
-              <option key={item}>{item}</option>
+            {modeGroups.map(([group, items]) => (
+              <optgroup key={group} label={group}>
+                {items.map((item) => (
+                  <option key={item}>{item}</option>
+                ))}
+              </optgroup>
             ))}
           </select>
         </label>
@@ -82,7 +78,11 @@ export function AiAssistantPanel({ missionSlug, missionTitle, stage }: { mission
 
       <label className="field" style={{ marginTop: 16 }}>
         <span>Ask for help</span>
-        <textarea value={message} onChange={(event) => setMessage(event.target.value)} />
+        <textarea
+          value={message}
+          onChange={(event) => setMessage(event.target.value)}
+          placeholder="Say what you tried and where you got stuck. Example: my stock counter works, but I need help rebuilding it so I understand the loop."
+        />
       </label>
 
       <p className="safety">

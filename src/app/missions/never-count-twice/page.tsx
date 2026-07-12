@@ -16,9 +16,9 @@ export default async function MissionDetailPage() {
 
   return (
     <div className="page narrow-page">
-      <section className="phone-shell">
-        <Link className="big-meta" href="/student/dashboard">
-          Back to missions
+      <section>
+        <Link className="btn secondary" href="/student/dashboard" style={{ minHeight: 40, padding: "8px 14px" }}>
+          ← Back to dashboard
         </Link>
         <div className="toolbar" style={{ justifyContent: "space-between", marginTop: 22 }}>
           <Chip tone="teal">{mission.tier} mission</Chip>
@@ -64,7 +64,7 @@ export default async function MissionDetailPage() {
                   <span className="big-meta">Current stage</span>
                   <h2>{currentStage.title}</h2>
                 </div>
-                <Chip tone={currentStage.status === "revision_requested" ? "amber" : "teal"}>
+                <Chip tone={currentStage.status === "revision_requested" ? "coral" : currentStage.status === "submitted" ? "amber" : "teal"}>
                   {currentStage.status.replaceAll("_", " ")}
                 </Chip>
               </div>
@@ -114,7 +114,7 @@ export default async function MissionDetailPage() {
               />
             </div>
           </article>
-          <Link className="btn primary" href={`/missions/${mission.slug}/lesson`}>
+          <Link className="btn secondary" href={`/missions/${mission.slug}/lesson`}>
             Continue foundation lesson
           </Link>
           <Link className="btn ai" href="/student/assistant">

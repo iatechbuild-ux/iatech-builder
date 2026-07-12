@@ -7,7 +7,7 @@ export default async function LessonPage() {
 
   return (
     <div className="page narrow-page">
-      <section className="phone-shell">
+      <section>
         <Link className="big-meta" href="/missions/never-count-twice">
           Back to Never count twice
         </Link>
