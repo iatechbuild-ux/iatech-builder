@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireRole } from "@/lib/auth/guards";
+import { notifyTutorsOfSubmission } from "@/lib/email/events";
 import { FormValidationError, optionalUrl, safeFileName, textField, uuidField } from "@/lib/platform/validation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -95,6 +96,10 @@ export async function saveSubmissionAction(_previous: SubmissionActionState, for
       submitted_at: intent === "submit" ? new Date().toISOString() : null,
     }).eq("id", submissionId).eq("student_id", user.id);
     if (update.error) return { status: "error", message: update.error.message };
+
+    if (intent === "submit") {
+      await notifyTutorsOfSubmission(submissionId).catch(() => null);
+    }
 
     revalidatePath("/student/submission");
     revalidatePath("/student/dashboard");

@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import { isAppRole, roleHomePath, type AppRole } from "@/lib/auth/roles";
 import { safeNextPath, withAuthMessage } from "@/lib/auth/redirects";
 import { syncProfile } from "@/lib/auth/profile-sync";
+import { sendWelcomeEmail } from "@/lib/email/events";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 function textValue(formData: FormData, key: string) {
@@ -105,6 +106,8 @@ export async function signUpAction(formData: FormData) {
     if (!result.ok) {
       authError("/signup", result.message || "Profile creation failed.");
     }
+
+    await sendWelcomeEmail({ id: data.user.id, email: data.user.email, fullName, role }).catch(() => null);
   }
 
   if (!data.session) {

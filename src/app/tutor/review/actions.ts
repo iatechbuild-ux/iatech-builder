@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import { requireAnyRole } from "@/lib/auth/guards";
+import { notifyStudentOfReview } from "@/lib/email/events";
 import { FormValidationError, scoreField, textField, uuidField } from "@/lib/platform/validation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -32,6 +33,7 @@ export async function reviewSubmissionAction(_previous: ReviewActionState, formD
       p_scores: scores,
     });
     if (error) return { status: "error", message: error.message };
+    await notifyStudentOfReview(submissionId, decision).catch(() => null);
     revalidatePath("/tutor/dashboard");
     revalidatePath("/tutor/review");
     revalidatePath("/student/dashboard");

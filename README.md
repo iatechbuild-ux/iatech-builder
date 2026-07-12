@@ -63,6 +63,14 @@ AI_MODEL=your_low_cost_gemini_flash_class_model
 
 Without an AI provider key, the assistant route should return a safe local fallback so the MVP remains demoable.
 
+### Transactional email
+
+Product email uses Brevo through a server-only adapter and a durable Supabase outbox. Configure `BREVO_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME`, `EMAIL_REPLY_TO`, `BREVO_WEBHOOK_SECRET`, `CRON_SECRET`, and `EMAIL_DAILY_LIMIT` in the deployment environment. The sender address must belong to a domain authenticated in Brevo.
+
+Supabase Auth emails use the same provider through custom SMTP. In Supabase Dashboard, open **Authentication > Email > SMTP Settings** and enter the Brevo SMTP relay credentials. Keep these separate from `BREVO_API_KEY` and never expose either credential as a `NEXT_PUBLIC_` variable.
+
+Set the Brevo transactional webhook to `/api/webhooks/brevo?secret=<BREVO_WEBHOOK_SECRET>` and select delivery, bounce, blocked, complaint, and unsubscribe events. Vercel invokes `/api/cron/email` daily using `CRON_SECRET`; transactional messages attempt immediate delivery, while the cron retries failures, sends opted-in inactivity reminders, and sends parent summaries on Mondays.
+
 Current local note: the system Node on this machine is `16.20.2`, while the Codex bundled runtime has Node `24.14.0`. The old `package-lock.json` was removed because it still described the Next 13 scaffold. Regenerate a fresh lockfile with `npm install` after the local npm registry certificate/proxy issue is fixed.
 
 ## Static prototype
