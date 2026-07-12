@@ -144,7 +144,7 @@ export async function requestPasswordResetAction(formData: FormData) {
   }
 
   const requestHeaders = await headers();
-  const origin = requestHeaders.get("origin") || "http://localhost:3000";
+  const origin = (process.env.APP_URL || requestHeaders.get("origin") || "http://localhost:3000").replace(/\/$/, "");
   let result: Awaited<ReturnType<typeof supabase.auth.resetPasswordForEmail>>;
   try {
     result = await supabase.auth.resetPasswordForEmail(email, {
