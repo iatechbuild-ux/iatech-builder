@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 
 const publicRoutes = [
   ["/", /Complete missions/i],
-  ["/login", /Log in/i],
-  ["/signup", /Create an IATECH Builder account/i],
+  ["/login", /Welcome back/i],
+  ["/signup", /Start building with IATECH/i],
   ["/forgot-password", /Reset|password/i],
 ] as const;
 
@@ -19,7 +19,7 @@ for (const [path, heading] of publicRoutes) {
 
 test("public signup cannot request a privileged role", async ({ page }) => {
   await page.goto("/signup");
-  const role = page.getByLabel("Role");
+  const role = page.getByLabel("Register as");
   await expect(role.locator('option[value="student"]')).toHaveCount(1);
   await expect(role.locator('option[value="parent"]')).toHaveCount(1);
   await expect(role.locator('option[value="tutor"]')).toHaveCount(0);

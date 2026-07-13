@@ -15,43 +15,40 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const next = params?.next || "";
 
   return (
-    <div className="page narrow-page">
-      <section className="panel">
-        <span className="chip teal">Secure access</span>
-        <h1 className="page-title">Log in to IATECH Builder</h1>
-        <p className="page-lead">
-          Pick up your missions, reviews, and progress where you left off.
-        </p>
+    <div className="page narrow-page auth-page">
+      <section className="panel auth-panel">
+        <header className="auth-intro">
+          <span className="chip teal">Secure access</span>
+          <h1 className="page-title">Welcome back</h1>
+          <p className="page-lead">
+            Log in to continue to your missions, reviews, or learner progress.
+          </p>
+        </header>
 
         {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
         {params?.notice ? <p className="form-message" role="status">{params.notice}</p> : null}
 
-        <form action={signInAction} className="form-grid" style={{ marginTop: 22 }}>
+        <form action={signInAction} className="form-grid auth-form">
           <input name="next" type="hidden" value={next} />
-          <label className="field">
+          <label className="field" htmlFor="login-email">
             <span>Email</span>
-            <input autoComplete="email" name="email" required type="email" />
+            <input autoComplete="email" id="login-email" name="email" required spellCheck={false} type="email" />
           </label>
-          <label className="field">
-            <span>Password</span>
-            <input autoComplete="current-password" name="password" required type="password" />
-          </label>
-          <button className="btn primary" type="submit">
+          <div className="field">
+            <div className="auth-field-heading">
+              <label htmlFor="login-password">Password</label>
+              <Link href="/forgot-password">Forgot password?</Link>
+            </div>
+            <input autoComplete="current-password" id="login-password" name="password" required type="password" />
+          </div>
+          <button className="btn primary auth-submit" type="submit">
             Log in
           </button>
         </form>
 
-        <div className="actions">
-          <Link className="btn secondary" href="/signup">
-            Create an account
-          </Link>
-          <Link className="btn secondary" href="/forgot-password">
-            Reset password
-          </Link>
-          <Link className="btn secondary" href="/">
-            Back to home
-          </Link>
-        </div>
+        <p className="auth-switch">
+          New to IATECH Builder? <Link href="/signup">Create an account</Link>
+        </p>
       </section>
     </div>
   );

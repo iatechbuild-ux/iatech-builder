@@ -17,53 +17,51 @@ export default async function SignupPage({ searchParams }: SignupPageProps) {
   const params = await searchParams;
 
   return (
-    <div className="page narrow-page">
-      <section className="panel">
-        <span className="chip teal">Join the pilot</span>
-        <h1 className="page-title">Create an IATECH Builder account</h1>
-        <p className="page-lead">
-          Learners and parents can register here. Tutor and admin access is assigned by a platform administrator.
-        </p>
+    <div className="page narrow-page auth-page">
+      <section className="panel auth-panel">
+        <header className="auth-intro">
+          <span className="chip teal">Create your account</span>
+          <h1 className="page-title">Start building with IATECH</h1>
+          <p className="page-lead">
+            Students and parents can register here. Tutors receive access from an administrator.
+          </p>
+        </header>
 
         {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
 
-        <form action={signUpAction} className="form-grid" style={{ marginTop: 22 }}>
-          <label className="field">
+        <form action={signUpAction} className="form-grid auth-form">
+          <label className="field" htmlFor="signup-name">
             <span>Full name</span>
-            <input autoComplete="name" name="fullName" required />
+            <input autoComplete="name" id="signup-name" name="fullName" required />
           </label>
-          <label className="field">
+          <label className="field" htmlFor="signup-email">
             <span>Email</span>
-            <input autoComplete="email" name="email" required type="email" />
+            <input autoComplete="email" id="signup-email" name="email" required spellCheck={false} type="email" />
           </label>
-          <label className="field">
+          <label className="field" htmlFor="signup-password">
             <span>Password</span>
-            <input autoComplete="new-password" minLength={8} name="password" required type="password" />
+            <input aria-describedby="signup-password-hint" autoComplete="new-password" id="signup-password" minLength={8} name="password" required type="password" />
+            <small className="meta" id="signup-password-hint">Use at least 8 characters.</small>
           </label>
-          <label className="field">
-            <span>Role</span>
-            <select defaultValue="student" name="role">
+          <label className="field" htmlFor="signup-role">
+            <span>Register as</span>
+            <select aria-describedby="signup-role-hint" defaultValue="student" id="signup-role" name="role">
               {roles.map(([value, label]) => (
                 <option key={value} value={value}>
                   {label}
                 </option>
               ))}
             </select>
-            <small className="meta">Parent accounts cannot access learner records until an administrator verifies the family link.</small>
+            <small className="meta" id="signup-role-hint">Parent accounts need an administrator to verify the family link before learner records appear.</small>
           </label>
-          <button className="btn primary" type="submit">
+          <button className="btn primary auth-submit" type="submit">
             Create account
           </button>
         </form>
 
-        <div className="actions">
-          <Link className="btn secondary" href="/login">
-            Log in instead
-          </Link>
-          <Link className="btn secondary" href="/">
-            Back to home
-          </Link>
-        </div>
+        <p className="auth-switch">
+          Already have an account? <Link href="/login">Log in</Link>
+        </p>
       </section>
     </div>
   );
