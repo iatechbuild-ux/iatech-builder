@@ -183,7 +183,10 @@ export async function updatePasswordAction(formData: FormData) {
   const { error } = await supabase.auth.updateUser({ password });
 
   if (error) {
-    authError("/reset-password", error.message);
+    const message = /session|refresh token|jwt/i.test(error.message)
+      ? "Your password reset session has expired. Request a new link and use the latest email."
+      : "We could not update your password. Request a new reset link and try again.";
+    authError("/reset-password", message);
   }
 
   redirect("/login?notice=Password updated. Log in with your new password.");

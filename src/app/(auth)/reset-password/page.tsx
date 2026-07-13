@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { updatePasswordAction } from "../actions";
 
 type ResetPasswordPageProps = {
@@ -10,6 +12,12 @@ type ResetPasswordPageProps = {
 
 export default async function ResetPasswordPage({ searchParams }: ResetPasswordPageProps) {
   const params = await searchParams;
+  const supabase = await createSupabaseServerClient();
+  const { data } = supabase ? await supabase.auth.getUser() : { data: { user: null } };
+
+  if (!data.user) {
+    redirect("/forgot-password?error=Open the latest password reset link from your email before choosing a new password.");
+  }
 
   return (
     <div className="page narrow-page">

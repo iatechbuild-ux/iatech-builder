@@ -25,3 +25,18 @@ test("public signup cannot request a privileged role", async ({ page }) => {
   await expect(role.locator('option[value="tutor"]')).toHaveCount(0);
   await expect(role.locator('option[value="admin"]')).toHaveCount(0);
 });
+
+test("invalid recovery links give a safe next step", async ({ page }) => {
+  await page.goto("/auth/confirm?token_hash=invalid-or-consumed&type=recovery&next=/reset-password");
+
+  await expect(page).toHaveURL((url) => url.pathname === "/forgot-password");
+  await expect(page.getByRole("alert")).toContainText("Request a new link");
+  await expect(page.getByRole("alert")).not.toContainText("token");
+});
+
+test("password form requires a verified recovery session", async ({ page }) => {
+  await page.goto("/reset-password");
+
+  await expect(page).toHaveURL((url) => url.pathname === "/forgot-password");
+  await expect(page.getByRole("alert")).toContainText("latest password reset link");
+});

@@ -18,7 +18,11 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
-      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent(error.message)}`, request.url));
+      const destination = next === "/reset-password" ? "/forgot-password" : "/login";
+      const message = next === "/reset-password"
+        ? "This password reset link is invalid or has expired. Request a new link and use the latest email."
+        : "This sign-in link is invalid or has expired. Request a new link and try again.";
+      return NextResponse.redirect(new URL(`${destination}?error=${encodeURIComponent(message)}`, request.url));
     }
   }
 
