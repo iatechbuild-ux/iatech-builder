@@ -87,7 +87,6 @@ export function AppNavigation({ groups, user }: { groups: NavigationGroup[]; use
           <strong>IATECH Builder</strong>
         </Link>
         <div className="mobile-bar-actions">
-          <ThemeToggle compact />
           <button
             className="mobile-menu-button"
             type="button"
@@ -110,6 +109,10 @@ export function AppNavigation({ groups, user }: { groups: NavigationGroup[]; use
               {user ? <span className="meta breakable-text">{user.fullName}</span> : null}
             </div>
             <NavigationLinks groups={groups} pathname={pathname} onNavigate={() => setOpen(false)} />
+            <div className="theme-row mobile-theme-row">
+              <span className="meta">Appearance</span>
+              <ThemeToggle />
+            </div>
             {user ? (
               <section className="nav-group" aria-label="Account actions">
                 <p>Account</p>

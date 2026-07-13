@@ -601,6 +601,14 @@ button:disabled {
   font-size: 16px;
 }
 
+.hero-primary-actions {
+  justify-content: center;
+}
+
+.hero-login-prompt {
+  display: none;
+}
+
 .hero-grid,
 .page-grid,
 .two-column {
@@ -1361,30 +1369,71 @@ th {
   }
 
   .hero-nav {
-    display: block;
-    padding: 14px 0 24px;
-  }
-
-  .hero-nav > .brand {
     display: none;
   }
 
-  .hero-nav .hero-nav-actions {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-    gap: 10px;
+  .hero-stage {
+    min-height: auto;
+    align-content: start;
+    gap: 28px;
+    padding: 38px 0 max(32px, env(safe-area-inset-bottom));
   }
 
-  .hero-nav .hero-nav-actions .btn {
-    width: 100%;
-    min-height: 48px;
-    padding-inline: 12px;
-    touch-action: manipulation;
+  .hero-copy {
+    max-width: 360px;
   }
 
   .hero-copy h1 {
-    font-size: 32px;
+    font-size: 30px;
+    text-wrap: balance;
+  }
+
+  .hero-copy p {
+    max-width: 340px;
+    text-wrap: pretty;
+  }
+
+  .hero-primary-actions {
+    display: grid;
+    justify-items: stretch;
+    gap: 14px;
+    margin-top: 26px;
+  }
+
+  .hero-primary-actions .hero-cta {
+    width: 100%;
+    min-height: 52px;
+    touch-action: manipulation;
+  }
+
+  .hero-login-prompt {
+    display: block;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+  }
+
+  .hero-login-prompt a {
+    color: var(--brand-text);
+    font-weight: 650;
+    text-underline-offset: 3px;
+  }
+
+  .hero-feature {
+    gap: 8px;
+    min-height: 0;
+  }
+
+  .hero-feature p {
+    display: none;
+  }
+
+  .hero-feature b {
+    margin-bottom: 0;
+  }
+
+  .hero-stage > .chip-row {
+    display: none;
   }
 
   .page-title {

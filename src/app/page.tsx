@@ -24,13 +24,16 @@ export default function LandingPage() {
           <Chip tone="teal">Tutor-guided – ages 10–18</Chip>
           <h1>Don't just take lessons. Complete missions. Build real things.</h1>
           <p>
-            Learn web development, Python, data, CMS, automation, and smart AI skills by solving
-            real problems - then prove what you can understand, rebuild, master, and teach.
+            Build practical skills in web, Python, data, automation, and AI by solving real
+            problems and shipping projects you can prove.
           </p>
-          <div className="actions" style={{ justifyContent: "center" }}>
+          <div className="actions hero-primary-actions">
             <Link className="btn primary hero-cta" href="/signup">
-              Start your first mission
+              Get started
             </Link>
+            <p className="hero-login-prompt">
+              Already have an account? <Link href="/login">Log in</Link>
+            </p>
           </div>
         </div>
 
