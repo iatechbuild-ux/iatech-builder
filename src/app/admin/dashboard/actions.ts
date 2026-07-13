@@ -1,16 +1,55 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 import { requireRole } from "@/lib/auth/guards";
+import { syncProfile } from "@/lib/auth/profile-sync";
+import { isAppRole } from "@/lib/auth/roles";
 import { FormValidationError, textField, uuidField } from "@/lib/platform/validation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient, createSupabaseServerClient } from "@/lib/supabase/server";
 
 async function adminClient() {
   await requireRole("admin");
   const supabase = await createSupabaseServerClient();
   if (!supabase) throw new Error("Supabase is not configured");
   return supabase;
+}
+
+function peopleRedirect(kind: "notice" | "error", message: string): never {
+  const params = new URLSearchParams({ view: "people", [kind]: message });
+  redirect(`/admin/dashboard?${params.toString()}`);
+}
+
+export async function inviteUserAction(formData: FormData) {
+  await requireRole("admin");
+  const fullName = textField(formData, "full_name", { required: true, max: 120 });
+  const email = textField(formData, "email", { required: true, max: 254 }).toLowerCase();
+  const roleValue = textField(formData, "role", { required: true, max: 20 });
+
+  if (!isAppRole(roleValue)) peopleRedirect("error", "Choose a valid account role.");
+
+  const admin = createSupabaseAdminClient();
+  if (!admin) peopleRedirect("error", "User invitations are not configured on the server.");
+
+  const appUrl = (process.env.APP_URL || "https://iatech-builder.vercel.app").replace(/\/$/, "");
+  const { data, error } = await admin.auth.admin.inviteUserByEmail(email, {
+    data: { full_name: fullName },
+    redirectTo: `${appUrl}/auth/callback?next=/reset-password`,
+  });
+
+  if (error || !data.user) peopleRedirect("error", error?.message || "The invitation could not be created.");
+
+  const { error: metadataError } = await admin.auth.admin.updateUserById(data.user.id, {
+    app_metadata: { role: roleValue },
+  });
+  if (metadataError) peopleRedirect("error", metadataError.message);
+
+  const profile = await syncProfile({ userId: data.user.id, email, fullName, role: roleValue });
+  if (!profile.ok) peopleRedirect("error", profile.message || "The invited profile could not be created.");
+
+  revalidatePath("/admin/dashboard");
+  peopleRedirect("notice", `Invitation sent to ${email}.`);
 }
 
 export async function createCohortAction(formData: FormData) {
