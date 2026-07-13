@@ -3,7 +3,28 @@ import { applyProgressToMission, getCapabilityFramework, getMissionCatalog, getS
 import { pathwayLabelByKey, type LearnerPathway } from "@/lib/domain/types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import type { EarnedBadge, PortfolioRecord, StudentDashboardData, SubmissionDraft } from "./types";
+import type { EarnedBadge, LearningProgram, PortfolioRecord, StudentDashboardData, SubmissionDraft } from "./types";
+
+export async function getLearningPrograms(): Promise<LearningProgram[]> {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from("learning_programs")
+    .select("id, code, name, short_description, learner_promise, program_type, availability, icon_key")
+    .neq("availability", "archived")
+    .order("position");
+  if (error) return [];
+  return (data ?? []).map((row) => ({
+    id: row.id,
+    code: row.code,
+    name: row.name,
+    shortDescription: row.short_description,
+    learnerPromise: row.learner_promise,
+    programType: row.program_type as LearningProgram["programType"],
+    availability: row.availability as LearningProgram["availability"],
+    iconKey: row.icon_key,
+  }));
+}
 
 async function signedEvidenceUrl(supabase: NonNullable<Awaited<ReturnType<typeof createSupabaseServerClient>>>, path: string | null) {
   if (!path) return null;
@@ -42,8 +63,10 @@ export async function getStudentDashboardData(): Promise<StudentDashboardData | 
   ]);
   if (!supabase || !user || user.role !== "student") return null;
 
-  const [studentResult, progressResult, badgeResult, portfolio] = await Promise.all([
+  const [studentResult, placementResult, enrollmentResult, progressResult, badgeResult, portfolio] = await Promise.all([
     supabase.from("students").select("pathway").eq("profile_id", user.id).maybeSingle(),
+    supabase.from("placement_results").select("id").eq("student_id", user.id).limit(1).maybeSingle(),
+    supabase.from("student_program_enrollments").select("program_id").eq("student_id", user.id).eq("is_primary", true).eq("status", "active").maybeSingle(),
     supabase.from("student_skill_progress").select("skill_id, independence_score").eq("student_id", user.id),
     supabase.from("student_badges").select("badge_id, awarded_at").eq("student_id", user.id).order("awarded_at", { ascending: false }).limit(6),
     getStudentPortfolio(),
@@ -83,7 +106,17 @@ export async function getStudentDashboardData(): Promise<StudentDashboardData | 
   }
 
   const currentStatus = activeProgress?.currentStage?.status;
-  const nextAction = !activeMission
+  const placementComplete = Boolean(placementResult.data);
+  const activeProgramResult = enrollmentResult.data?.program_id
+    ? await supabase.from("learning_programs").select("code, name").eq("id", enrollmentResult.data.program_id).maybeSingle()
+    : null;
+  const activeProgram = activeProgramResult?.data ?? null;
+  const completedMissionCount = missions.filter((mission) => mission.progress >= 100).length;
+  const nextAction = !placementComplete
+    ? { label: "Find my starting level", href: "/student/assessment", detail: "Answer 10 quick questions so your first mission fits you." }
+    : !activeProgram
+      ? { label: "Choose what to build", href: "/student/domains", detail: "Pick a learning direction for your first set of missions." }
+    : !activeMission
     ? { label: "Explore skill labs", href: "/student/data-lab", detail: "Practice a capability while the next mission is prepared." }
     : !activeProgress?.started
       ? { label: "Start your next mission", href: `/missions/${activeMission.slug}`, detail: "Begin with Experience and make the problem visible." }
@@ -104,6 +137,9 @@ export async function getStudentDashboardData(): Promise<StudentDashboardData | 
     badges,
     portfolio: portfolio.slice(0, 3),
     aiIndependenceScore: scored.length ? Math.round(scored.reduce((sum, score) => sum + score, 0) / scored.length) : 1,
+    placementComplete,
+    completedMissionCount,
+    activeProgram,
   };
 }
 

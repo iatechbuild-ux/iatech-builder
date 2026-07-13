@@ -1,18 +1,55 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
+import { ArrowLeft, ArrowRight, BookOpen, Clock3 } from "lucide-react";
+import { getStudentMissionProgress } from "@/lib/domain";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-type LessonPageProps = { params: Promise<{ slug: string }> };
+type LessonPageProps = { params: Promise<{ slug: string }>; searchParams?: Promise<{ lesson?: string }> };
 
-export default async function DataDrivenLessonPage({ params }: LessonPageProps) {
-  const { slug } = await params;
-  const supabase = await createSupabaseServerClient();
+export default async function DataDrivenLessonPage({ params, searchParams }: LessonPageProps) {
+  const [{ slug }, query, supabase] = await Promise.all([params, searchParams, createSupabaseServerClient()]);
   if (!supabase) notFound();
-  const mission = await supabase.from("missions").select("id,title").eq("slug", slug).maybeSingle();
-  if (!mission.data) notFound();
-  const stages = await supabase.from("mission_stages").select("id,title,position").eq("mission_id", mission.data.id).order("position");
-  const stageIds = (stages.data ?? []).map((stage) => stage.id);
-  const lessons = stageIds.length ? await supabase.from("lessons").select("id,mission_stage_id,title,body_md,estimated_minutes,position").in("mission_stage_id", stageIds).order("position") : { data: [] };
-  return <div className="page narrow-page"><section><Link className="btn secondary" href={`/missions/${slug}`}>← Back to mission</Link><h1 className="page-title">{mission.data.title}: lessons</h1>{(lessons.data ?? []).length ? <div className="form-grid">{(lessons.data ?? []).map((lesson) => <article className="panel" key={lesson.id}><h2>{lesson.title}</h2><p className="meta">About {lesson.estimated_minutes} minutes</p><p>{lesson.body_md}</p></article>)}</div> : <div className="empty-state"><h2>No lesson published yet</h2><p>Your tutor can still guide the mission stages while curriculum content is prepared.</p></div>}</section></div>;
+  const [missionResult, progress] = await Promise.all([
+    supabase.from("missions").select("id,title").eq("slug", slug).maybeSingle(),
+    getStudentMissionProgress(slug),
+  ]);
+  const mission = missionResult.data;
+  if (!mission) notFound();
+  const activeStage = progress?.currentStage;
+  const stageId = activeStage?.missionStageId;
+  const lessonsResult = stageId
+    ? await supabase.from("lessons").select("id,title,body_md,estimated_minutes,position").eq("mission_stage_id", stageId).order("position")
+    : { data: [] };
+  const lessons = lessonsResult.data ?? [];
+  const requestedIndex = Number.parseInt(query?.lesson ?? "1", 10) - 1;
+  const index = Number.isFinite(requestedIndex) ? Math.min(Math.max(requestedIndex, 0), Math.max(lessons.length - 1, 0)) : 0;
+  const lesson = lessons[index];
+
+  return (
+    <div className="page lesson-player-page">
+      <section>
+        <Link className="mission-back-link" href={`/missions/${slug}`}><ArrowLeft aria-hidden="true" size={17} /> Mission path</Link>
+        <header className="lesson-player-header">
+          <div><span className="eyebrow">{activeStage?.stage ?? "Mission"} lesson</span><h1>{lesson?.title ?? activeStage?.title ?? mission.title}</h1></div>
+          {lesson?.estimated_minutes ? <span><Clock3 aria-hidden="true" size={17} /> About {lesson.estimated_minutes} min</span> : null}
+        </header>
+
+        {lesson ? (
+          <article className="lesson-focus-card">
+            <div className="lesson-focus-icon" aria-hidden="true"><BookOpen size={25} /></div>
+            <div className="lesson-body"><p>{lesson.body_md}</p></div>
+          </article>
+        ) : (
+          <div className="lesson-focus-card"><div className="lesson-focus-icon" aria-hidden="true"><BookOpen size={25} /></div><div><h2>Learn with your tutor</h2><p>This step has no reading yet. Use the mission instructions and ask your tutor for the activity.</p></div></div>
+        )}
+
+        <nav className="lesson-navigation" aria-label="Lesson navigation">
+          {index > 0 ? <Link className="btn secondary" href={`/missions/${slug}/lesson?lesson=${index}`}>Previous</Link> : <span />}
+          {index < lessons.length - 1
+            ? <Link className="btn primary" href={`/missions/${slug}/lesson?lesson=${index + 2}`}>Next lesson <ArrowRight aria-hidden="true" size={18} /></Link>
+            : <Link className="btn primary" href={`/missions/${slug}/workspace`}>Try it yourself <ArrowRight aria-hidden="true" size={18} /></Link>}
+        </nav>
+      </section>
+    </div>
+  );
 }

@@ -24,6 +24,20 @@ export type StudentDashboardData = {
   badges: EarnedBadge[];
   portfolio: PortfolioRecord[];
   aiIndependenceScore: number;
+  placementComplete: boolean;
+  completedMissionCount: number;
+  activeProgram: { code: string; name: string } | null;
+};
+
+export type LearningProgram = {
+  id: string;
+  code: string;
+  name: string;
+  shortDescription: string;
+  learnerPromise: string;
+  programType: "pathway" | "studio";
+  availability: "available" | "coming_soon";
+  iconKey: string;
 };
 
 export type SubmissionDraft = {

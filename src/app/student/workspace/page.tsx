@@ -1,74 +1,28 @@
 import Link from "next/link";
-import { Chip, TextField } from "@/components/ui";
-import { getMissionBySlug } from "@/lib/domain";
+import { ArrowRight, Dumbbell, Lightbulb, RefreshCw } from "lucide-react";
+import { getStudentDashboardData } from "@/lib/platform";
 
-export default async function BuildWorkspacePage() {
-  const mission = await getMissionBySlug("never-count-twice");
-  if (!mission) return null;
+export default async function PracticePage() {
+  const student = await getStudentDashboardData();
+  if (!student) return null;
+  const missionHref = student.activeMission ? `/missions/${student.activeMission.slug}` : "/student/dashboard";
 
   return (
-    <div className="page narrow-page">
+    <div className="page narrow-page practice-page">
       <section>
-        <div className="toolbar" style={{ justifyContent: "space-between" }}>
-          <h1 className="page-title">Rebuild workspace</h1>
-          <Chip tone="teal">Stage: Rebuild</Chip>
-        </div>
-        <p className="page-lead">{mission.rebuildTask}</p>
+        <span className="chip teal">Practice</span>
+        <h1 className="page-title">Try it again in your own way</h1>
+        <p className="page-lead">Practice is for testing an idea, making a mistake, and changing one thing at a time.</p>
 
-        <section style={{ marginTop: 26 }}>
-          <h2>Rebuild checklist</h2>
-          <div className="form-grid">
-            <label className="option-card selected">
-              <span>Create the stock list</span>
-              <input type="checkbox" defaultChecked />
-            </label>
-            <label className="option-card selected">
-              <span>Add items with input()</span>
-              <input type="checkbox" defaultChecked />
-            </label>
-            <label className="option-card">
-              <span>Count items with a loop</span>
-              <input type="checkbox" />
-            </label>
-            <label className="option-card">
-              <span>Show a running total</span>
-              <input type="checkbox" />
-            </label>
-          </div>
+        <section className="practice-primary-card">
+          <span className="practice-icon" aria-hidden="true"><Dumbbell size={25} /></span>
+          <div><span className="eyebrow">Continue your current build</span><h2>{student.activeMission?.title ?? "Your next mission"}</h2><p>{student.activeMission ? `Return to ${student.activeMission.currentStage} and try the next small step.` : "Your next practice task will appear after your learning direction is ready."}</p></div>
+          <Link className="btn primary" href={missionHref}>Open my mission <ArrowRight aria-hidden="true" size={18} /></Link>
         </section>
 
-        <section className="panel ai-panel" style={{ marginTop: 26 }}>
-          <div className="toolbar" style={{ justifyContent: "space-between" }}>
-            <Chip tone="purple">AI assistant</Chip>
-            <Link className="btn secondary" href="/student/assistant">
-              Ask assistant
-            </Link>
-          </div>
-          <p className="page-lead">"{mission.aiSprint}"</p>
-          <p className="safety">
-            Never share passwords, addresses, or private family info with AI tools.
-          </p>
-          <TextField
-            textarea
-            label="What did the AI get wrong or miss? (required)"
-            placeholder="It assumed she has a laptop - she only has a phone, so..."
-          />
-        </section>
-
-        <section style={{ marginTop: 26 }}>
-          <TextField textarea label="My build notes" value="Loop works. Next: totals per item type." />
-        </section>
-
-        <section className="panel" style={{ marginTop: 26 }}>
-          <h2>Next stages</h2>
-          <p><strong>Master:</strong> {mission.masteryChallenge}</p>
-          <p><strong>Teach:</strong> {mission.teachActivity}</p>
-        </section>
-
-        <div className="actions">
-          <Link className="btn primary" href="/student/submission">
-            I'm ready to submit
-          </Link>
+        <div className="practice-rules" aria-label="How to practice">
+          <div><RefreshCw aria-hidden="true" size={20} /><span><strong>Repeat</strong> the part that was hard.</span></div>
+          <div><Lightbulb aria-hidden="true" size={20} /><span><strong>Change 1 thing</strong> and check what happens.</span></div>
         </div>
       </section>
     </div>

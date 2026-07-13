@@ -1,83 +1,72 @@
 import Link from "next/link";
-import { ArrowRight, Award, BriefcaseBusiness } from "lucide-react";
-import { Chip, LabCard, MissionCard, ProgressBar } from "@/components/ui";
-import { getLearningLabs } from "@/lib/domain";
+import { ArrowRight, Check, Compass, LockKeyhole, Sparkles } from "lucide-react";
+import { Chip } from "@/components/ui";
 import { getStudentDashboardData } from "@/lib/platform";
 
-export default async function StudentDashboardPage() {
-  const [student, learningLabs] = await Promise.all([getStudentDashboardData(), getLearningLabs()]);
+type StudentDashboardPageProps = { searchParams?: Promise<{ notice?: string }> };
 
+export default async function StudentDashboardPage({ searchParams }: StudentDashboardPageProps) {
+  const [student, params] = await Promise.all([getStudentDashboardData(), searchParams]);
   if (!student) return null;
 
+  const pathSteps = [
+    { label: "Find your level", detail: "A quick warm-up", done: student.placementComplete, current: !student.placementComplete },
+    { label: "Choose your direction", detail: student.activeProgram?.name ?? "Web or Python", done: Boolean(student.activeProgram), current: student.placementComplete && !student.activeProgram },
+    { label: "Build your mission", detail: student.activeMission?.title ?? "Your tutor will prepare this", done: student.completedMissionCount > 0, current: Boolean(student.activeProgram) && student.completedMissionCount === 0 },
+    { label: "Share what you made", detail: "Tutor review & portfolio", done: student.completedMissionCount > 0, current: false },
+  ];
+
   return (
-    <div className="page narrow-page">
-      <section>
-        <header className="dashboard-top">
-          <div>
-            <p className="big-meta">Good afternoon</p>
-            <div className="toolbar">
-              <h1 className="page-title">{student.firstName}</h1>
-              <Chip tone="teal">{student.pathway}</Chip>
-            </div>
-          </div>
-          <div className="avatar" aria-label={`${student.firstName}'s initials`}>{student.initials}</div>
-        </header>
-
-        <section className="next-action-band">
-          <div><span className="eyebrow">Next required action</span><h2>{student.nextAction.label}</h2><p>{student.nextAction.detail}</p></div>
-          <Link className="btn primary" href={student.nextAction.href}>Continue<ArrowRight aria-hidden="true" size={18} /></Link>
-        </section>
-
-        {student.activeMission ? <div style={{ marginTop: 20 }}><MissionCard mission={student.activeMission} primaryHref={`/missions/${student.activeMission.slug}`} /></div> : null}
-
-        <section style={{ marginTop: 30 }}>
-          <div className="toolbar" style={{ justifyContent: "space-between" }}><h2>Capability progress</h2><span className="meta">Evidence-backed, not lesson completion</span></div>
-          <div className="capability-list">
-            {student.capabilities.map((capability) => <article className="capability-row" key={capability.name}><div><strong>{capability.name}</strong><span className="meta">{capability.evidenceCount === 1 ? "1 skill area" : `${capability.evidenceCount} skill areas`} with reviewed evidence</span></div><div><span className="meta">{capability.score}%</span><ProgressBar value={capability.score} /></div></article>)}
-          </div>
-        </section>
-
-        <section className="panel ai-panel" style={{ marginTop: 24 }}>
-          <div className="toolbar" style={{ justifyContent: "space-between" }}>
-            <div>
-              <h2>AI assistant</h2>
-              <p>
-                Use AI to start faster, then prove what you understand, rebuild, and can teach.
-              </p>
-            </div>
-            <Chip tone="teal">Independence {student.aiIndependenceScore}/4</Chip>
-          </div>
-          <div className="actions">
-            <Link className="btn ai" href="/student/assistant">
-              Ask for stage-aware help
-            </Link>
-          </div>
-        </section>
-
-        <section style={{ marginTop: 30 }}>
-          <h2>Live skill labs</h2>
-          <div className="form-grid">
-            {learningLabs.map((lab) => (
-              <LabCard lab={lab} key={lab.slug} />
-            ))}
-          </div>
-        </section>
-
-        <section style={{ marginTop: 30 }}>
-          <h2>Your badges</h2>
-          {student.badges.length ? <div className="compact-cards">{student.badges.map((badge) => <article className="mini-evidence" key={badge.id}><Award aria-hidden="true" size={20} /><div><strong>{badge.name}</strong><p className="meta">{badge.description}</p></div></article>)}</div> : <div className="empty-state"><Award aria-hidden="true" /><p>Your first badge appears after a tutor approves capability evidence.</p></div>}
-        </section>
-
-        <section style={{ marginTop: 30 }}>
-          <div className="toolbar" style={{ justifyContent: "space-between" }}>
-            <h2>Your portfolio</h2>
-            <Link className="chip teal" href="/student/portfolio">
-              See all
-            </Link>
-          </div>
-          {student.portfolio.length ? student.portfolio.map((item) => <Link className="list-row" href="/student/portfolio" key={item.id}><div><strong>{item.title}</strong><p className="meta">{item.skills.join(" · ") || "Approved capability evidence"}</p></div><span className="meta">Open</span></Link>) : <div className="empty-state"><BriefcaseBusiness aria-hidden="true" /><p>Approved submissions become private portfolio projects automatically.</p></div>}
-        </section>
+    <div className="page student-learn-page">
+      <section className="student-learn-header">
+        <div>
+          <p className="student-kicker">Hello, {student.firstName}</p>
+          <h1 className="student-display">Ready for your next build?</h1>
+        </div>
+        <div className="avatar" aria-label={`${student.firstName}'s initials`}>{student.initials}</div>
       </section>
+
+      {params?.notice ? <p className="form-message success" role="status">{params.notice}</p> : null}
+
+      <section className="mission-compass" aria-labelledby="next-step-title">
+        <div className="mission-compass-icon" aria-hidden="true"><Compass size={28} /></div>
+        <div className="mission-compass-copy">
+          <span className="eyebrow">Your next step</span>
+          <h2 id="next-step-title">{student.nextAction.label}</h2>
+          <p>{student.nextAction.detail}</p>
+        </div>
+        <Link className="btn primary student-primary-action" href={student.nextAction.href}>
+          {student.placementComplete ? "Continue learning" : "Start warm-up"}
+          <ArrowRight aria-hidden="true" size={18} />
+        </Link>
+      </section>
+
+      <section className="student-path" aria-labelledby="learning-path-title">
+        <div className="student-section-heading">
+          <div>
+            <span className="eyebrow">Your journey</span>
+            <h2 id="learning-path-title">One step at a time</h2>
+          </div>
+          <Chip tone="teal">{student.pathway}</Chip>
+        </div>
+        <ol className="student-path-list">
+          {pathSteps.map((step, index) => (
+            <li className={step.current ? "current" : step.done ? "done" : "locked"} key={step.label}>
+              <span className="student-path-marker" aria-hidden="true">
+                {step.done ? <Check size={18} /> : step.current ? index + 1 : <LockKeyhole size={16} />}
+              </span>
+              <div><strong>{step.label}</strong><span>{step.detail}</span></div>
+              {step.current ? <span className="student-you-are-here">You are here</span> : null}
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <aside className="student-quiet-help">
+        <Sparkles aria-hidden="true" size={20} />
+        <p><strong>Stuck?</strong> Ask for a hint. You will still do the thinking and building.</p>
+        <Link href="/student/assistant">Get a hint</Link>
+      </aside>
     </div>
   );
 }

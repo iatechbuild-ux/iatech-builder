@@ -1,4 +1,4 @@
-import { completePlacementAction } from "./actions";
+import { PlacementAssessmentForm } from "./placement-assessment-form";
 
 type AssessmentPageProps = { searchParams?: Promise<{ error?: string }> };
 
@@ -50,27 +50,12 @@ export default async function SkillAssessmentPage({ searchParams }: AssessmentPa
   return (
     <div className="page narrow-page">
       <section>
-        <span className="chip amber">Friendly placement warm-up</span>
-        <h1 className="page-title">Find your starting pathway</h1>
-        <p className="page-lead">Answer all 10 questions. This is not a pass-or-fail test; it helps your tutor choose the right starting support.</p>
+        <span className="chip amber">No grades. No pressure.</span>
+        <h1 className="page-title">Let’s find your starting level</h1>
+        <p className="page-lead">Choose the answer that feels most like you. There are no wrong starting points.</p>
         {params?.error ? <p className="form-message error" role="alert">{params.error}</p> : null}
-        <form action={completePlacementAction} className="form-grid" style={{ marginTop: 28 }}>
-          {questions.map((question, index) => (
-            <fieldset className="panel" key={question.title}>
-              <legend><strong>{index + 1}. {question.title}</strong></legend>
-              <div className="form-grid" style={{ marginTop: 14 }}>
-                {question.options.map(([value, label]) => (
-                  <label className="option-card" key={label}>
-                    <input name={`q${index + 1}`} required type="radio" value={value} />
-                    <span>{label}</span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-          ))}
-          <button className="btn primary" type="submit">Calculate my pathway</button>
-        </form>
-        <p className="meta">Your recommendation can be adjusted by a tutor after reviewing your work with you.</p>
+        <PlacementAssessmentForm questions={questions} />
+        <p className="meta">Your tutor can adjust this level after seeing how you learn and build.</p>
       </section>
     </div>
   );

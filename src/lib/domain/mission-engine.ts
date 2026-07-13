@@ -141,7 +141,15 @@ export const getStudentMissionProgress = cache(async (slug: string): Promise<Stu
 });
 
 export function applyProgressToMission(mission: Mission, progress: StudentMissionProgress | null): Mission {
-  if (!progress?.started) return mission;
+  if (!progress) return mission;
+  if (!progress.started) {
+    return {
+      ...mission,
+      progress: 0,
+      currentStage: "Experience",
+      stages: mission.stages.map((stage, index) => ({ ...stage, status: index === 0 ? "current" : "locked" })),
+    };
+  }
   const statusByStage = new Map(progress.stages.map((stage) => [learningStageLabelByKey[stage.stage], toUiStatus(stage.status)]));
   const currentLabel = progress.currentStage ? learningStageLabelByKey[progress.currentStage.stage] : "Evidence";
   return {

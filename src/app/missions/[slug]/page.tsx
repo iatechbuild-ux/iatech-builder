@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-
-import { Chip, StageRail } from "@/components/ui";
+import { ArrowLeft, ArrowRight, Check, Clock3, LockKeyhole } from "lucide-react";
+import { Chip, ProgressBar } from "@/components/ui";
 import { applyProgressToMission, getMissionBySlug, getStudentMissionProgress } from "@/lib/domain";
-import { beginStageAction, startMissionAction, submitStageAction } from "../never-count-twice/actions";
+import { beginStageAction, startMissionAction } from "../never-count-twice/actions";
 
 type MissionPageProps = { params: Promise<{ slug: string }> };
 
@@ -14,25 +14,60 @@ export default async function DataDrivenMissionPage({ params }: MissionPageProps
   const progress = await getStudentMissionProgress(slug);
   const mission = applyProgressToMission(catalogMission, progress);
   const currentStage = progress?.currentStage;
+  const currentStageContent = catalogMission.stages.find((stage) => stage.stage.toLowerCase() === currentStage?.stage);
 
   return (
-    <div className="page narrow-page"><section>
-      <Link className="btn secondary" href="/student/dashboard">← Back to dashboard</Link>
-      <div className="toolbar" style={{ justifyContent: "space-between", marginTop: 22 }}><Chip tone="teal">{mission.tier} mission</Chip><Chip tone="purple">{mission.pathway}</Chip></div>
-      <h1 className="page-title">{mission.title}</h1>
-      <div className="inset"><h2>The problem</h2><p>{mission.problem}</p><p><strong>People served:</strong> {mission.audience}</p></div>
-      <section style={{ marginTop: 28 }}><h2>Learning stages</h2><StageRail mission={mission} /></section>
-      <section className="panel" style={{ marginTop: 28 }}>
-        {!progress?.started ? <><h2>Begin the mission</h2><p>Start at Experience. Required stages unlock in order after tutor review.</p><form action={startMissionAction}><input name="missionSlug" type="hidden" value={slug} /><button className="btn primary" type="submit">Start Experience</button></form></>
-          : currentStage ? <>
-            <div className="toolbar" style={{ justifyContent: "space-between" }}><h2>{currentStage.title}</h2><Chip tone={currentStage.status === "submitted" ? "amber" : "teal"}>{currentStage.status.replaceAll("_", " ")}</Chip></div>
-            {currentStage.tutorNote ? <p className="safety"><strong>Tutor note:</strong> {currentStage.tutorNote}</p> : null}
-            {currentStage.status === "available" || currentStage.status === "revision_requested" ? <form action={beginStageAction}><input name="progressId" type="hidden" value={currentStage.id} /><button className="btn primary" type="submit">{currentStage.status === "revision_requested" ? "Work on revision" : `Begin ${currentStage.stage}`}</button></form> : null}
-            {currentStage.status === "in_progress" ? <form action={submitStageAction} className="form-grid"><input name="progressId" type="hidden" value={currentStage.id} />{currentStage.requirements.map((requirement) => <label className="field" key={requirement.id}><span>{requirement.title}{requirement.required ? " (required)" : ""}</span><small className="meta">{requirement.description}</small><input name="requirementId" type="hidden" value={requirement.id} /><textarea defaultValue={requirement.response} name={`evidence_${requirement.id}`} required={requirement.required} /></label>)}<button className="btn primary" type="submit">Submit stage for tutor review</button></form> : null}
-            {currentStage.status === "submitted" ? <p>Your evidence is with your tutor. The next stage remains locked until review.</p> : null}
-          </> : <><h2>Mission complete</h2><p>All learning stages and evidence are complete.</p></>}
+    <div className="page mission-journey-page">
+      <section>
+        <Link className="mission-back-link" href="/student/dashboard"><ArrowLeft aria-hidden="true" size={17} /> Learn</Link>
+        <header className="mission-journey-header">
+          <div><span className="eyebrow">{mission.tier} mission</span><h1>{mission.title}</h1><p>{mission.problem}</p></div>
+          <div className="mission-progress-summary"><strong>{mission.progress}%</strong><span>complete</span></div>
+        </header>
+        <ProgressBar value={mission.progress} />
+
+        <ol className="mission-stage-map" aria-label="Mission learning path">
+          {mission.stages.map((stage, index) => (
+            <li className={stage.status} key={stage.stage} aria-current={stage.status === "current" || stage.status === "revision_requested" ? "step" : undefined}>
+              <span aria-hidden="true">{stage.status === "done" ? <Check size={16} /> : stage.status === "locked" ? <LockKeyhole size={14} /> : index + 1}</span>
+              <small>{stage.stage}</small>
+            </li>
+          ))}
+        </ol>
+
+        <section className="mission-next-card" aria-labelledby="mission-next-title">
+          {!progress?.started ? (
+            <>
+              <div className="mission-next-number" aria-hidden="true">1</div>
+              <div><span className="eyebrow">First step</span><h2 id="mission-next-title">See the problem up close</h2><p>Start with Experience. You will notice what is happening before trying to fix it.</p></div>
+              <form action={startMissionAction}><input name="missionSlug" type="hidden" value={slug} /><button className="btn primary" type="submit">Start mission <ArrowRight aria-hidden="true" size={18} /></button></form>
+            </>
+          ) : currentStage ? (
+            <>
+              <div className="mission-next-number" aria-hidden="true">{currentStage.position}</div>
+              <div className="mission-next-copy">
+                <div className="toolbar"><span className="eyebrow">Now: {currentStage.stage}</span><Chip tone={currentStage.status === "submitted" ? "amber" : currentStage.status === "revision_requested" ? "coral" : "teal"}>{currentStage.status.replaceAll("_", " ")}</Chip></div>
+                <h2 id="mission-next-title">{currentStage.title}</h2>
+                <p>{currentStageContent?.instructions ?? "Complete this step, then show the evidence to your tutor."}</p>
+                {currentStage.tutorNote ? <p className="mission-tutor-note"><strong>Your tutor says:</strong> {currentStage.tutorNote}</p> : null}
+              </div>
+              <div className="mission-next-action">
+                {currentStage.status === "available" || currentStage.status === "revision_requested" ? (
+                  <form action={beginStageAction}><input name="progressId" type="hidden" value={currentStage.id} /><button className="btn primary" type="submit">{currentStage.status === "revision_requested" ? "Fix this step" : `Start ${currentStage.stage}`} <ArrowRight aria-hidden="true" size={18} /></button></form>
+                ) : currentStage.status === "in_progress" ? (
+                  <Link className="btn primary" href={`/missions/${slug}/lesson`}>Open this lesson <ArrowRight aria-hidden="true" size={18} /></Link>
+                ) : (
+                  <div className="mission-waiting"><Clock3 aria-hidden="true" size={20} /><span>Your tutor is checking this step. You can come back when it unlocks.</span></div>
+                )}
+              </div>
+            </>
+          ) : (
+            <><div className="mission-next-number" aria-hidden="true"><Check size={24} /></div><div><span className="eyebrow">Mission complete</span><h2 id="mission-next-title">You built it and proved it</h2><p>Your approved work is ready for your portfolio.</p></div><Link className="btn primary" href="/student/portfolio">See my portfolio</Link></>
+          )}
+        </section>
+
+        <aside className="mission-context"><strong>Who this helps</strong><span>{mission.audience}</span><Link href="/student/assistant">I need a hint</Link></aside>
       </section>
-      <div className="actions"><Link className="btn secondary" href={`/missions/${slug}/lesson`}>Open lesson</Link><Link className="btn ai" href="/student/assistant">Ask AI assistant</Link></div>
-    </section></div>
+    </div>
   );
 }

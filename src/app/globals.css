@@ -1740,7 +1740,991 @@ th {
   }
 }
 
+.student-learn-page {
+  width: min(880px, 100%);
+  margin: 0 auto;
+}
+
+.student-learn-header,
+.student-section-heading,
+.placement-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.student-kicker {
+  margin: 0 0 4px;
+  color: var(--brand-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.student-display {
+  max-width: 680px;
+  margin: 0;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.65rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.mission-compass {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 20px;
+  margin-top: 32px;
+  padding: 26px;
+  border: 1px solid color-mix(in srgb, var(--brand-solid) 28%, var(--border));
+  border-radius: 20px;
+  background: linear-gradient(120deg, var(--surface-1) 0%, var(--brand-bg) 160%);
+  box-shadow: var(--shadow);
+}
+
+.mission-compass-icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border-radius: 18px;
+  color: #ffffff;
+  background: var(--brand-solid);
+  transform: rotate(-4deg);
+}
+
+.mission-compass-copy h2,
+.student-section-heading h2 {
+  margin: 2px 0 4px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.mission-compass-copy p,
+.student-quiet-help p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.student-primary-action {
+  white-space: nowrap;
+}
+
+.student-path {
+  margin-top: 30px;
+  padding: 26px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface-1);
+}
+
+.student-path-list {
+  display: grid;
+  gap: 0;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.student-path-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  min-height: 72px;
+}
+
+.student-path-list li:not(:last-child)::after {
+  position: absolute;
+  top: 50px;
+  bottom: -8px;
+  left: 20px;
+  width: 2px;
+  background: var(--border-strong);
+  content: "";
+}
+
+.student-path-list li.done:not(:last-child)::after {
+  background: var(--brand-solid);
+}
+
+.student-path-marker {
+  z-index: 1;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--text-faint);
+  background: var(--surface-1);
+  font-weight: 700;
+}
+
+.student-path-list .current .student-path-marker,
+.student-path-list .done .student-path-marker {
+  border-color: var(--brand-solid);
+  color: #ffffff;
+  background: var(--brand-solid);
+}
+
+.student-path-list li div {
+  display: grid;
+  min-width: 0;
+}
+
+.student-path-list li div span {
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+}
+
+.student-path-list .locked {
+  opacity: 0.66;
+}
+
+.student-you-are-here {
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: var(--brand-text);
+  background: var(--brand-bg);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.student-quiet-help {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px 4px;
+}
+
+.student-quiet-help svg {
+  flex: 0 0 auto;
+  color: var(--ai-solid);
+}
+
+.student-quiet-help a {
+  margin-left: auto;
+  color: var(--brand-text);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.placement-form {
+  margin-top: 30px;
+}
+
+.placement-progress {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-3);
+}
+
+.placement-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--progress-fill);
+  transition: width 220ms ease;
+}
+
+.placement-count {
+  margin: 10px 0 18px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.placement-question {
+  min-width: 0;
+  margin: 0;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-1);
+}
+
+.placement-question legend {
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-weight: 650;
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+.placement-options {
+  display: grid;
+  clear: both;
+  gap: 10px;
+}
+
+.placement-option {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  background: var(--surface-1);
+  cursor: pointer;
+}
+
+.placement-option:hover,
+.placement-option:has(input:checked) {
+  border-color: var(--brand-solid);
+  background: var(--brand-bg);
+}
+
+.placement-option:focus-within {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.placement-option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--brand-solid);
+}
+
+.placement-actions {
+  margin-top: 18px;
+}
+
+.domain-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.domain-choice-card {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: 16px;
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface-1);
+}
+
+.domain-choice-card:hover {
+  border-color: color-mix(in srgb, var(--brand-solid) 55%, var(--border));
+}
+
+.domain-choice-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--brand-text);
+  background: var(--brand-bg);
+}
+
+.domain-choice-card h2,
+.domain-studios h2 {
+  margin: 0;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.domain-choice-card p {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+}
+
+.domain-choice-card .domain-promise {
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+}
+
+.domain-choice-card form,
+.domain-choice-card .btn {
+  width: 100%;
+}
+
+.domain-studios {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) minmax(0, 1.4fr);
+  gap: 28px;
+  margin-top: 26px;
+  padding: 22px 24px;
+  border-radius: 16px;
+  background: var(--surface-2);
+}
+
+.domain-studio-list {
+  display: grid;
+  gap: 8px;
+}
+
+.domain-studio-list div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 7px 0;
+}
+
+.domain-studio-list svg {
+  color: var(--text-secondary);
+}
+
+.domain-studio-list span {
+  overflow-wrap: anywhere;
+}
+
+.domain-studio-list small {
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.mission-journey-page,
+.lesson-player-page {
+  width: min(920px, 100%);
+  margin: 0 auto;
+}
+
+.mission-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-secondary);
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.mission-back-link:hover {
+  color: var(--brand-text);
+}
+
+.mission-journey-header,
+.lesson-player-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 28px 0 18px;
+}
+
+.mission-journey-header h1,
+.lesson-player-header h1 {
+  max-width: 720px;
+  margin: 4px 0 8px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.mission-journey-header p {
+  max-width: 690px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+
+.mission-progress-summary {
+  display: grid;
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.mission-progress-summary strong {
+  font-size: 1.8rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.mission-progress-summary span,
+.lesson-player-header > span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.mission-stage-map {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  margin: 22px 0 30px;
+  padding: 0;
+  list-style: none;
+}
+
+.mission-stage-map li {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--text-faint);
+  text-align: center;
+}
+
+.mission-stage-map li > span {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface-1);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.mission-stage-map li.done > span,
+.mission-stage-map li.current > span,
+.mission-stage-map li.revision_requested > span {
+  border-color: var(--brand-solid);
+  color: #ffffff;
+  background: var(--brand-solid);
+}
+
+.mission-stage-map li.current small,
+.mission-stage-map li.revision_requested small {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.mission-next-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 18px 20px;
+  padding: 28px;
+  border: 1px solid color-mix(in srgb, var(--brand-solid) 30%, var(--border));
+  border-radius: 20px;
+  background: var(--surface-1);
+  box-shadow: var(--shadow);
+}
+
+.mission-next-number {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border-radius: 17px;
+  color: #ffffff;
+  background: var(--brand-solid);
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 750;
+  transform: rotate(-3deg);
+}
+
+.mission-next-copy h2,
+.mission-next-card > div h2 {
+  margin: 4px 0 6px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.mission-next-copy > p,
+.mission-next-card > div > p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.mission-next-action,
+.mission-next-card > form,
+.mission-next-card > .btn {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.mission-tutor-note {
+  margin-top: 14px !important;
+  padding: 12px 14px;
+  border-left: 3px solid var(--achievement-solid);
+  color: var(--text) !important;
+  background: var(--achievement-bg);
+}
+
+.mission-waiting {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  max-width: 540px;
+  color: var(--text-secondary);
+}
+
+.mission-context {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 10px 4px;
+  color: var(--text-secondary);
+}
+
+.mission-context strong {
+  color: var(--text);
+}
+
+.mission-context a {
+  margin-left: auto;
+  color: var(--brand-text);
+  font-weight: 700;
+}
+
+.lesson-player-header > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: var(--surface-2);
+}
+
+.lesson-focus-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 20px;
+  min-height: 290px;
+  padding: clamp(22px, 5vw, 42px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface-1);
+}
+
+.lesson-focus-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 15px;
+  color: var(--brand-text);
+  background: var(--brand-bg);
+}
+
+.lesson-body {
+  max-width: 68ch;
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.lesson-body p {
+  margin-top: 0;
+  white-space: pre-wrap;
+}
+
+.lesson-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.evidence-workspace-page {
+  width: min(780px, 100%);
+  margin: 0 auto;
+}
+
+.evidence-workspace-header {
+  margin: 28px 0 22px;
+}
+
+.evidence-workspace-header h1 {
+  margin: 4px 0 8px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.evidence-workspace-header p {
+  max-width: 620px;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.evidence-workspace-form {
+  display: grid;
+  gap: 14px;
+}
+
+.evidence-prompt {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 4px 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-1);
+}
+
+.evidence-prompt-number {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--brand-text);
+  background: var(--brand-bg);
+  font-size: 0.85rem;
+  font-weight: 750;
+}
+
+.evidence-prompt > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+}
+
+.evidence-prompt small {
+  overflow-wrap: anywhere;
+  color: var(--text-secondary);
+}
+
+.evidence-prompt textarea {
+  grid-column: 1 / -1;
+  min-height: 130px;
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 11px;
+  color: var(--text);
+  background: var(--surface-0);
+  resize: vertical;
+}
+
+.evidence-prompt:focus-within {
+  border-color: var(--brand-solid);
+}
+
+.evidence-save-bar {
+  position: sticky;
+  bottom: 12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--surface-1) 94%, transparent);
+  box-shadow: 0 8px 28px rgba(16, 24, 20, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.evidence-save-bar > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 0.86rem;
+}
+
+.evidence-save-bar > div {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.practice-primary-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 14px 18px;
+  margin-top: 28px;
+  padding: 26px;
+  border: 1px solid color-mix(in srgb, var(--brand-solid) 28%, var(--border));
+  border-radius: 20px;
+  background: var(--surface-1);
+}
+
+.practice-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 16px;
+  color: #ffffff;
+  background: var(--brand-solid);
+}
+
+.practice-primary-card h2 {
+  margin: 3px 0 5px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: 1.55rem;
+  letter-spacing: -0.025em;
+}
+
+.practice-primary-card p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.practice-primary-card > .btn {
+  grid-column: 2;
+  justify-self: start;
+}
+
+.practice-rules {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.practice-rules div {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 15px;
+  border-radius: 13px;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+}
+
+.practice-rules svg {
+  flex: 0 0 auto;
+  color: var(--brand-text);
+}
+
+.student-help-page {
+  width: min(760px, 100%);
+  margin: 0 auto;
+}
+
+.student-help-header {
+  margin: 28px 0 22px;
+}
+
+.student-help-header h1 {
+  margin: 4px 0 8px;
+  font-family: "Aptos Display", "Segoe UI", ui-sans-serif, sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.student-help-header p {
+  max-width: 630px;
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.student-help-safety {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin: 14px 0 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: var(--text-secondary);
+  background: var(--surface-2);
+  font-size: 0.88rem;
+}
+
+.student-help-safety svg {
+  flex: 0 0 auto;
+  color: var(--brand-text);
+}
+
+@media (max-width: 700px) {
+  .mission-compass {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 20px;
+  }
+
+  .student-primary-action {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .student-quiet-help {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .student-quiet-help p {
+    flex: 1;
+  }
+
+  .student-quiet-help a {
+    width: 100%;
+    margin-left: 32px;
+  }
+
+  .domain-choice-grid,
+  .domain-studios {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-journey-header,
+  .lesson-player-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .mission-progress-summary {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    text-align: left;
+  }
+
+  .mission-stage-map {
+    gap: 4px;
+  }
+
+  .mission-stage-map li small {
+    overflow: hidden;
+    width: 100%;
+    font-size: 0.68rem;
+    text-overflow: ellipsis;
+  }
+
+  .mission-next-card {
+    padding: 20px;
+  }
+
+  .mission-context {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .mission-context a {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .evidence-save-bar {
+    align-items: stretch;
+    flex-direction: column;
+    bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .evidence-save-bar > div,
+  .evidence-save-bar .btn {
+    width: 100%;
+  }
+
+  .practice-rules {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-learn-header .avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mission-compass-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .student-path,
+  .placement-question {
+    padding: 18px;
+  }
+
+  .student-section-heading {
+    align-items: flex-start;
+  }
+
+  .student-path-list li {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .student-path-marker {
+    width: 38px;
+    height: 38px;
+  }
+
+  .student-path-list li:not(:last-child)::after {
+    top: 48px;
+    left: 18px;
+  }
+
+  .student-you-are-here {
+    grid-column: 2;
+    width: fit-content;
+  }
+
+  .placement-actions {
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .placement-actions .btn {
+    width: 100%;
+  }
+
+  .mission-next-card {
+    grid-template-columns: 1fr;
+  }
+
+  .mission-next-number {
+    width: 44px;
+    height: 44px;
+  }
+
+  .mission-next-action,
+  .mission-next-card > form,
+  .mission-next-card > .btn {
+    grid-column: 1;
+    width: 100%;
+  }
+
+  .mission-next-action .btn,
+  .mission-next-card > form .btn {
+    width: 100%;
+  }
+
+  .lesson-focus-card {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .practice-primary-card {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .practice-primary-card > .btn {
+    grid-column: 1;
+    width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .placement-progress span {
+    transition: none;
+  }
   *,
   *::before,
   *::after {

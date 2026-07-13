@@ -9,6 +9,8 @@ test("admin creates a complete staged mission that a learner can open", async ({
   await page.getByLabel("Password").fill(qaValue("QA_TEST_PASSWORD"));
   await page.getByRole("button", { name: /log in/i }).click();
   await expect(page).toHaveURL((url) => url.pathname === "/admin/dashboard", { timeout: 20_000 });
+  await page.getByRole("link", { name: "Curriculum" }).first().click();
+  await expect(page).toHaveURL((url) => url.pathname === "/admin/dashboard" && url.searchParams.get("view") === "curriculum");
 
   const suffix = Date.now();
   const slug = `qa-community-helper-${suffix}`;
