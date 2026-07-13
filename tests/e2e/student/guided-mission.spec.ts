@@ -31,11 +31,19 @@ test("student follows one guided action from mission to lesson to saved evidence
   }
   await openLesson.click();
   await expect(page).toHaveURL(/\/missions\/never-count-twice\/lesson/);
-  await expect(page.getByRole("navigation", { name: "Lesson navigation" })).toBeVisible();
-
-  const nextLesson = page.getByRole("link", { name: "Next lesson" });
-  while (await nextLesson.isVisible()) await nextLesson.click();
-  await page.getByRole("link", { name: "Try it yourself" }).click();
+  await expect(page.getByText(/Step 1 of 5/)).toBeVisible();
+  await expect(page.getByText("Why this matters")).toBeVisible();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await expect(page.locator("#main-content").getByText("Learn", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await expect(page.locator("#main-content").getByText("Watch", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await page.locator(".teaching-check label").filter({ hasText: "Every repeated name is an error" }).click();
+  await expect(page.getByLabel("Every repeated name is an error")).toBeChecked();
+  await page.getByRole("button", { name: "Check my answer" }).click();
+  await expect(page.getByText(/Ada must investigate it first/)).toBeVisible();
+  await page.getByRole("button", { name: /continue/i }).click();
+  await page.getByRole("button", { name: "Open my workspace" }).click();
   await expect(page.getByRole("heading", { name: "What did you discover?" })).toBeVisible();
 
   const evidence = page.getByRole("textbox").first();

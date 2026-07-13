@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, BookOpen, Clock3 } from "lucide-react";
 import { getStudentMissionProgress } from "@/lib/domain";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { TeachingLessonPlayer, type LessonBlock } from "./teaching-lesson-player";
 
 type LessonPageProps = { params: Promise<{ slug: string }>; searchParams?: Promise<{ lesson?: string }> };
 
@@ -24,6 +25,16 @@ export default async function DataDrivenLessonPage({ params, searchParams }: Les
   const requestedIndex = Number.parseInt(query?.lesson ?? "1", 10) - 1;
   const index = Number.isFinite(requestedIndex) ? Math.min(Math.max(requestedIndex, 0), Math.max(lessons.length - 1, 0)) : 0;
   const lesson = lessons[index];
+  const { data: blocksData } = lesson
+    ? await supabase.from("lesson_blocks").select("id,block_type,title,body_md,options,position").eq("lesson_id", lesson.id).order("position")
+    : { data: [] };
+  const blocks = (blocksData ?? []) as LessonBlock[];
+  const { data: authData } = await supabase.auth.getUser();
+  const blockIds = blocks.map((block) => block.id);
+  const { data: completedData } = authData.user && blockIds.length
+    ? await supabase.from("student_lesson_block_progress").select("block_id").eq("student_id", authData.user.id).eq("passed", true).in("block_id", blockIds)
+    : { data: [] };
+  const completedIds = (completedData ?? []).map((row) => row.block_id);
 
   return (
     <div className="page lesson-player-page">
@@ -34,7 +45,7 @@ export default async function DataDrivenLessonPage({ params, searchParams }: Les
           {lesson?.estimated_minutes ? <span><Clock3 aria-hidden="true" size={17} /> About {lesson.estimated_minutes} min</span> : null}
         </header>
 
-        {lesson ? (
+        {blocks.length ? <TeachingLessonPlayer blocks={blocks} completedIds={completedIds} missionSlug={slug} /> : lesson ? (
           <article className="lesson-focus-card">
             <div className="lesson-focus-icon" aria-hidden="true"><BookOpen size={25} /></div>
             <div className="lesson-body"><p>{lesson.body_md}</p></div>
@@ -43,12 +54,12 @@ export default async function DataDrivenLessonPage({ params, searchParams }: Les
           <div className="lesson-focus-card"><div className="lesson-focus-icon" aria-hidden="true"><BookOpen size={25} /></div><div><h2>Learn with your tutor</h2><p>This step has no reading yet. Use the mission instructions and ask your tutor for the activity.</p></div></div>
         )}
 
-        <nav className="lesson-navigation" aria-label="Lesson navigation">
+        {!blocks.length ? <nav className="lesson-navigation" aria-label="Lesson navigation">
           {index > 0 ? <Link className="btn secondary" href={`/missions/${slug}/lesson?lesson=${index}`}>Previous</Link> : <span />}
           {index < lessons.length - 1
             ? <Link className="btn primary" href={`/missions/${slug}/lesson?lesson=${index + 2}`}>Next lesson <ArrowRight aria-hidden="true" size={18} /></Link>
             : <Link className="btn primary" href={`/missions/${slug}/workspace`}>Try it yourself <ArrowRight aria-hidden="true" size={18} /></Link>}
-        </nav>
+        </nav> : null}
       </section>
     </div>
   );
