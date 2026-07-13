@@ -396,6 +396,10 @@ main {
   padding: 24px 0 32px;
 }
 
+.hero-nav-actions {
+  margin-top: 0;
+}
+
 .hero-stage {
   min-height: calc(100vh - 112px);
   display: grid;
@@ -1357,12 +1361,26 @@ th {
   }
 
   .hero-nav {
-    align-items: flex-start;
-    padding-top: 16px;
+    display: block;
+    padding: 14px 0 24px;
   }
 
-  .hero-nav .actions {
-    justify-content: flex-end;
+  .hero-nav > .brand {
+    display: none;
+  }
+
+  .hero-nav .hero-nav-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-nav .hero-nav-actions .btn {
+    width: 100%;
+    min-height: 48px;
+    padding-inline: 12px;
+    touch-action: manipulation;
   }
 
   .hero-copy h1 {

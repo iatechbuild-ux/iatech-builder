@@ -9,7 +9,7 @@ export default function LandingPage() {
           <span className="brand-mark">IB</span>
           <strong>IATECH Builder</strong>
         </Link>
-        <div className="actions" style={{ marginTop: 0 }}>
+        <div className="actions hero-nav-actions">
           <Link className="btn secondary" href="/login">
             Log in
           </Link>
